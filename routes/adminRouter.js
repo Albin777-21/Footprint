@@ -3,7 +3,7 @@ const router=express();
 const {loginAdmin, adminDashboard,adminVerifyLogin, userField, blockUser, unblockUser,logout}=require('../controllers/admincntrl');
 const { allCategory,addCategory,editCategory, deleteCategory,updateCategory,unlistCategory, listCategory } = require("../controllers/categoryctrl");
 const {allProducts,addProduct,createProduct,editProduct,productEdited,unlistProduct,listProduct,deleteProduct,searchProduct}=require("../controllers/productCtrl");
-const {adminOrderDetails,changeStatusCanceled,changeStatusConfirmed,changeStatusDelivered,changeStatusReturned,changeStatusShipped,changeStausPending,adminOrderList,allOrderDetails}=require('../controllers/orderCtrl')
+const {adminOrderDetails,changeStatusCanceled,changeStatusConfirmed,changeStatusDelivered,changeStatusReturned,changeStatusShipped,changeStausPending,adminOrderList,allOrderDetails, loadsalesReport, salesReport}=require('../controllers/orderCtrl')
 const {loadCoupon,addCoupon,coupon,editCoupon,deleteCoupon,updateCoupon}=require('../controllers/couponCtrl')
 router.set('view engine','ejs'); 
 router.set('views','./views/admin');
@@ -30,40 +30,40 @@ router.get('/unblock',unblockUser);
 
 //PRODUCT ROUTE
 
-router.get('/product',allProducts);
-router.get('/product/:page', allProducts);
-router.get('/addProduct',addProduct);
-router.post('/createProduct',upload.array('images', 12),createProduct);
-router.get('/editProduct',editProduct);
-router.post('/productEdited',upload.array('images', 12),productEdited);
-router.get('/unlistProduct',unlistProduct);
-router.get('/listProduct',listProduct);
-router.get('/deleteProduct',deleteProduct);
-router.post('/searchProduct',searchProduct);
+router.get('/product',isAdminAuth,allProducts);
+router.get('/product/:page',isAdminAuth, allProducts);
+router.get('/addProduct',isAdminAuth,addProduct);
+router.post('/createProduct',isAdminAuth,upload.array('images', 12),createProduct);
+router.get('/editProduct',isAdminAuth,editProduct);
+router.post('/productEdited',isAdminAuth,upload.array('images', 12),productEdited);
+router.get('/unlistProduct',isAdminAuth,unlistProduct);
+router.get('/listProduct',isAdminAuth,listProduct);
+router.get('/deleteProduct',isAdminAuth,deleteProduct);
+router.post('/searchProduct',isAdminAuth,searchProduct);
 
 
 
 
 //CATEGORY ROUTE
 
-router.get('/category',allCategory)
-router.post('/addCategory',upload.single('image'),addCategory);
-router.get('/editCategory',editCategory);
-router.post('/updateCategory',upload.single('image'),updateCategory);
-router.get('/deleteCategory',deleteCategory);
-router.get('/unlistCategory',unlistCategory);
-router.get('/listCategory',listCategory);
+router.get('/category',isAdminAuth,allCategory)
+router.post('/addCategory',isAdminAuth,upload.single('image'),addCategory);
+router.get('/editCategory',isAdminAuth,editCategory);
+router.post('/updateCategory',isAdminAuth,upload.single('image'),updateCategory);
+router.get('/deleteCategory',isAdminAuth,deleteCategory);
+router.get('/unlistCategory',isAdminAuth,unlistCategory);
+router.get('/listCategory',isAdminAuth,listCategory);
 
 //ORDER ROUTE
 
-router.get('/adminOrderList',adminOrderList)
-router.get('/adminOrderDetails',adminOrderDetails)
-router.get('/changeStatusPending',changeStausPending)
-router.get('/changeStatusConfirmed',changeStatusConfirmed)
-router.get('/changeStatusShipped',changeStatusShipped)
-router.get('/changeStatusCanceled',changeStatusCanceled)
-router.get('/changeStatusDelivered',changeStatusDelivered)
-router.get('/changeStatusReturned',changeStatusReturned)
+router.get('/adminOrderList',isAdminAuth,adminOrderList)
+router.get('/adminOrderDetails',isAdminAuth,adminOrderDetails)
+router.get('/changeStatusPending',isAdminAuth,changeStausPending)
+router.get('/changeStatusConfirmed',isAdminAuth,changeStatusConfirmed)
+router.get('/changeStatusShipped',isAdminAuth,changeStatusShipped)
+router.get('/changeStatusCanceled',isAdminAuth,changeStatusCanceled)
+router.get('/changeStatusDelivered',isAdminAuth,changeStatusDelivered)
+router.get('/changeStatusReturned',isAdminAuth,changeStatusReturned)
 
 //COUPON ROUTE
 
@@ -75,6 +75,10 @@ router.get('/editCoupon',isAdminAuth,editCoupon);
 router.post('/updateCoupon',isAdminAuth,updateCoupon);
 router.get('/deleteCoupon',isAdminAuth,deleteCoupon);
 
+//SALES REPORT
+
+router.get('/loadsalesReport',isAdminAuth,loadsalesReport)
+router.get('/salesReport',isAdminAuth,salesReport)
 
 
 module.exports=router;

@@ -6,6 +6,7 @@ const session = require('express-session')
 const Razorpay=require('razorpay')
 const Coupon=require('../model/couponModel')
 const { log } = require('console')
+const ExcelJS=require('exceljs')
 
 var instance = new Razorpay({ key_id:process.env.RAZORPAY_KEYID, key_secret: process.env.RAZORPAY_SECRETKEY })
 
@@ -589,6 +590,143 @@ const verifyPayment=asyncHandler(async(req,res)=>{
     }
   })
 
+  const loadsalesReport=asyncHandler(async(req,res)=>{
+    try {
+        const orders=await Order.find({status:'delivered'})
+        
+        const itemsperpage=3
+        const currentpage=parseInt(req.query.page)||1
+        const startindex=(currentpage-1)*itemsperpage
+        const endindex=startindex+itemsperpage
+        const totalpages=Math.ceil(orders.length/3)
+        const currentproduct=orders.slice(startindex,endindex)
+
+        res.render('salesReport',{orders:currentproduct,totalpages,currentpage})
+    } catch (error) {
+        console.log("Error Happens in the orderCtrl loadsalesReport",error);
+        res.status(500).send("Internal Server Error")
+        
+    }
+  })
+
+  const salesReport=asyncHandler(async(req,res)=>{
+    try {
+        const date=req.query.date
+        const format=req.query.format
+        let orders;
+        const currentDate=new Date();
+
+        //Helper function to get the first day of the current month
+        function getFirstDayofMonth(date){
+            return new Date(date.getFullYear(), date.getMonth(),1)
+        }
+
+        //Helper function to get the first day of the current year
+        function getFirstDayOfYear(date){
+            return new Date(date.getFullYear(),0,1)
+        }
+
+        switch(date){
+            case"today":
+            orders=await Order.find({
+                status:"delivered",
+                createdOn:{
+                    $gte:new Date().setHours(0,0,0,0),//start of today
+                    $lt:new Date().setHours(23,59,59,999)//end of the day
+                },
+            })
+            break
+            case"week":
+            const startOfWeek=new Date(currentDate)
+            startOfWeek.setDate(currentDate.getDate()-currentDate.getDay())//set the first day of the week(sunday)
+            startOfWeek.setHours(0,0,0,0)
+
+            const endOfWeek=new Date(startOfWeek)
+            endOfWeek.setDate(startOfWeek.getDate()+6)//Set to the last of the week (Saturday)
+            endOfWeek.setHours(23,59,59,999)
+
+            orders=await Order.find({
+                status:'delivered',
+                createdOn:{
+                    $gte:startOfWeek,
+                    $lt:endOfWeek,
+                },
+            })
+            break
+            case "month":
+                const startOfMonth=getFirstDayofMonth(currentDate)
+                const endOfMonth=new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0,23,59,59,999)
+
+                orders=await Order.find({
+                    status:'delivered',
+                    createdOn:{
+                        $gte:startOfMonth,
+                        $lt:endOfMonth,
+                    },
+                })
+                break
+                case 'year':
+              const startOfYear = getFirstDayOfYear(currentDate);
+              const endOfYear = new Date(currentDate.getFullYear(), 11, 31, 23, 59, 59, 999);
+
+              orders = await Order.find({
+                  status: 'delivered',
+                  createdOn: {
+                      $gte: startOfYear,
+                      $lt: endOfYear,
+                  },
+              });
+             
+              break;
+              default:
+                //Fetch all orders
+                orders=await Order.find({status:"delivered"})
+
+        }
+    if(format==='excel'){
+        const workbook=new ExcelJS.Workbook()
+        const worksheet=workbook.addWorksheet('Sales Report')
+
+        worksheet.columns=[
+            {header:"Order ID",key:'id',width:30},
+            {header:"Product name",key:'name',width:30},
+            {header:"Price",key:'price',width:15},
+            {header:'Status',key:'status',width:20},
+            {header:'Date',key:'date',width:15}
+        ]
+        orders.forEach(order=>{
+            order.product.forEach(product=>{
+                worksheet.addRow({
+                    id:order._id,
+                    name:product.title,
+                    price:order.totalPrice,
+                    status:order.status,
+                    date:order.createdOn.toLocaleDateString()
+                })
+            })
+        })
+        res.setHeader('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        res.setHeader('Content-Disposition','attachment; filename=sales-report.xlsx')
+        await workbook.xlsx.write(res)
+        return res.end()
+    }else{
+
+        const itemsperpage=3
+        const currentpage=parseInt(req.query.page)||1
+        const startindex=(currentpage-1)*itemsperpage
+        const endindex=startindex+itemsperpage
+        const totalpages=Math.ceil(orders.length/3)
+        const currentproduct=orders.slice(startindex,endindex)
+
+        res.render('salesReport',{orders,currentproduct,totalpages,currentpage})
+    }
+    } catch (error) {
+        console.log("Error happens in the order ctrl SalesReport",error);
+        res.status(500).send('An error Occured')
+        
+    }
+  })
+
 
 
 
@@ -617,7 +755,9 @@ module.exports = {
     useWallet,
     verifyPayment,
     buyNow,
-    buynowPlaceOrder
+    buynowPlaceOrder,
+    loadsalesReport,
+    salesReport
 
 
 
