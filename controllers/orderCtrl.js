@@ -5,6 +5,7 @@ const Order = require('../model/orderModel')
 const session = require('express-session')
 const Razorpay=require('razorpay')
 const Coupon=require('../model/couponModel')
+const { log } = require('console')
 
 var instance = new Razorpay({ key_id:process.env.RAZORPAY_KEYID, key_secret: process.env.RAZORPAY_SECRETKEY })
 
@@ -502,6 +503,91 @@ const verifyPayment=asyncHandler(async(req,res)=>{
     })
   }
   
+  //BUYNOW
+
+  const buyNow=asyncHandler(async(req,res)=>{
+    try {
+        const product=await Product.findById(req.query.id)
+        if(product.quantity>=1){
+            const id=req.session.user
+            const user=await User.findById(id)
+            const coupon=await Coupon.find({
+                'user.userId':{$ne:user._id}
+            })
+            let sum=product.price
+            res.render('buyNow',{user,product,sum,coupon})
+        }else{
+             res.redirect(`/aProduct?id=${product._id}`)
+        }
+    } catch (error) {
+        console.log("Error Occured in orderctrl buyNow",error);
+        res.status(500).send('Internal server error')
+        
+    }
+  })
+
+  //BUYNOW PLACE ORDER
+
+  const buynowPlaceOrder=asyncHandler(async(req,res)=>{
+    try {
+        const{totalPrice,createdOn,date,payment,addressId,prId}=req.body
+        const userId=req.session.user
+        const user=await User.findById(userId)
+
+        const address=user.address.find(item=>item._id.toString()===addressId)
+        
+        const productDetail=await Product.findById(prId)
+
+        const productDetails={
+            productId:productDetail._id,
+            price:productDetail.price,
+            title:productDetail.title,
+            image:productDetail.images[0],
+            quantity:1
+        }
+
+        const order=new Order({
+            totalPrice:totalPrice,
+            createdOn:createdOn,
+            date:date,
+            product:productDetail,
+            userId:userId,
+            payment:payment,
+            address:address,
+            status:'confirmed'
+
+        })
+
+        const orderDb=await order.save()
+
+        productDetails.quantity=productDetails.quantity-1
+        await productDetail.save()
+
+        if(order.payment=='cod'){
+            console.log("I am the cod method")
+            res.json({payment:true,method:'cod',order:orderDb,qty:1,orderId:user})
+        }else if(order.payment=='online'){
+            console.log('I am the razor method')
+            const generatedOrder=await generateOrderRazorpay(orderDb._id,orderDb.totalPrice)
+            res.json({payment:true,method:"online",razorpayOrder:generatedOrder,order:orderDb,orderId:user,qty:1})
+        }else if(order.payment=='wallet'){
+            const a=user.wallet-=totalPrice;
+            const  transaction={
+                amount:a,
+                status:'debit',
+                timestamp:new Date(),
+            }
+            user.history.push(transaction)
+
+            await user.save()
+            res.json({payment:true,method:'wallet'})
+        }
+    } catch (error) {
+        console.log("Error in the buynowOrderplaced function",error)
+        res.status(500).send('Internal server error')
+        
+    }
+  })
 
 
 
@@ -529,7 +615,9 @@ module.exports = {
     changeStatusReturned,
 
     useWallet,
-    verifyPayment
+    verifyPayment,
+    buyNow,
+    buynowPlaceOrder
 
 
 

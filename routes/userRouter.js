@@ -47,7 +47,7 @@ const { aProductPage, shopProduct } = require('../controllers/productCtrl');
 
 const { getCart, addToCart, deleteCart, modifyCartQuantity, deleteCartItem, } = require('../controllers/cartCtrl')
 
-const {checkOut,OrderPlaced,orderDetails,orderPage,allOrderDetails,cancelOrder,returnOrder,useWallet}=require('../controllers/orderCtrl')
+const {checkOut,OrderPlaced,orderDetails,orderPage,allOrderDetails,cancelOrder,returnOrder,useWallet, verifyPayment, buyNow, buynowPlaceOrder}=require('../controllers/orderCtrl')
 
 const { Wishlist, addToList, deleteWishlistItem }=require('../controllers/wishlistCtrl');
 
@@ -118,10 +118,13 @@ router.get('/aProduct', upload.single('images'), aProductPage)
  router.get('/checkout',auth.isLogged,checkOut)
  router.post('/orderPlaced',auth.isLogged,OrderPlaced)
  router.get('/orderDetails',auth.isLogged,orderDetails)
- router.get('/orderPage',orderPage)
+ router.get('/orderPage',auth.isLogged,orderPage)
  router.get('/allOrderDetails',auth.isLogged,allOrderDetails)
  router.get('/cancelOrder',auth.isLogged,cancelOrder)
  router.get('/return',auth.isLogged,returnOrder)
+ router.post('/verifyPayment',auth.isLogged,verifyPayment)
+ router.get('/buyNow',auth.isLogged,buyNow)
+ router.post('buynowPlaceOrder',auth.isLogged,buynowPlaceOrder)
  
 
 //Wishlist
