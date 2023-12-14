@@ -551,7 +551,7 @@ const verifyPayment=asyncHandler(async(req,res)=>{
             totalPrice:totalPrice,
             createdOn:createdOn,
             date:date,
-            product:productDetail,
+            product:productDetails,
             userId:userId,
             payment:payment,
             address:address,
@@ -608,6 +608,8 @@ const verifyPayment=asyncHandler(async(req,res)=>{
         
     }
   })
+
+  //SALES REPORT
 
   const salesReport=asyncHandler(async(req,res)=>{
     try {

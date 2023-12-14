@@ -58,8 +58,8 @@
                 <% if (orders[i].status=='pending') { %>
 
                     <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                    <% } else if(orders[i].status=='conformed'){ %>
-                        <td><span class="badge rounded-pill alert-success">conformed</span></td>
+                    <% } else if(orders[i].status=='confirmed'){ %>
+                        <td><span class="badge rounded-pill alert-success">confirmed</span></td>
                         <% } else if(orders[i].status=='canceled'){ %>
                             <td><span class="badge rounded-pill alert-danger">Cancelled</span></td>
                     <% } else if(orders[i].status=='shipped'){ %>

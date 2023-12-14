@@ -56,7 +56,10 @@ const { blockUser } = require('../controllers/admincntrl');
 const {productSearch,CategoryFilter,filterSearch,colorFilter,priceFilter,brandFilter,clearFilter,sortByPrice,sizeFilter}=require('../controllers/filterCtrl')
 
 const {addMoneyWallet,updateMongoWallet,sumWalletBuynow,sumWallet,walletPayment}=require('../controllers/walletCtrl')
+
 const {validateCoupon}=require('../controllers/couponCtrl');
+
+const { invoice, invoices } = require('../controllers/invoiceCtrl');
 
 
 
@@ -157,6 +160,11 @@ router.post('/sumWallet',sumWallet);
 
 
 router.post('/validateCoupon',validateCoupon);
+
+//INVOICES
+
+router.get('/invoice',isLogged,invoice)
+router.get('/invoices',isLogged,invoices)
 
 
 

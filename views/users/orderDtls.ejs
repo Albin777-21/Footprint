@@ -28,6 +28,23 @@
                             <div class="col-lg-6 col-md-6 ms-auto text-md-end">
 
                                 <a class="btn btn-primary" href="/invoice?id=<%= order._id%>">invoice</a>
+                                <% if (order.status=='pending') { %>
+                                    <a onclick="conformCansel('<%= order.product[0]._id %>','<%= order._id %>')" class="btn btn-md rounded font-sm">Cancel</a>
+                                <% } else if(order.status == 'conformed'){ %>
+                                    <a onclick="conformCansel('<%= order.product[0]._id %>','<%= order._id %>')" class="btn btn-md rounded font-sm">Cancel</a>
+                                   
+    
+                                    <% } else if(order.status == 'canceled'){ %>
+                                        <% } else if(order.status == 'shipped'){ %>
+                                            <a onclick="conformCansel('<%= order.product[0]._id %>','<%= order._id %>')" class="btn btn-md rounded font-sm">Cancel</a>
+                                            
+    
+    
+    <% } else if(order.status == 'delivered'){ %>
+    <a onclick="conformReturn('<%= order.product[0]._id %>','<%= order._id %>')" class="btn btn-md rounded font-sm">Return</a>
+    <% } else if(order.status=='returned'){ %>
+    
+    <% } %> 
                                 <a class="btn btn-secondary print ms-2" href="#"><i
                                         class="icon material-icons md-print"></i></a>
                             </div>
@@ -79,6 +96,45 @@
                                                         <a href="#">View profile</a>
                                     </div>
                                 </article>
+                            </div> <!-- col// -->
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                                        <i class="text-primary material-icons md-local_shipping"></i>
+                                    </span>
+                                    <div class="text">
+                                        <h6 class="mb-1">Order info</h6>
+                                        <p class="mb-1">
+                                            
+                                            Shipping:<%= order.address[0].adressType %>  <br> Pay method:<%= order.payment %>  <br> Status: 
+                                            <span class="badge rounded-pill alert-success text-success">
+                                            <% if(order.status=="returned"){%>Returned<%}%>
+                                            <% if(order.status=="pending"){%>Pending<%}%>
+                                            <% if(order.status=="canceled"){%>Canceled<%}%>
+                                            <% if(order.status=="delivered"){%>Delivered<%}%>
+                                            <% if(order.status=="returnreject"){%>Return Rejected<%}%>
+                                            <% if(order.status=="shipped"){%>Shipped<%}%>
+                                            <% if(order.status=="conformed"){%>Confirmed<%}%>
+                                            </span>
+                                            
+                                        </p>
+                                        
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                                        <i class="text-primary material-icons md-place"></i>
+                                    </span>
+                                    <div class="text">
+                                        <h6 class="mb-1">Deliver to</h6>
+                                        <p class="mb-1">
+                                            City: <%= order.address[0].townCity %> <br> <%= order.address[0].addressLine %> <br> Po Box <%= order.address[0]. pinCode %> <br>
+                                        <!-- <a href="#">View profile</a> -->
+                                    </div>
+                                </article>
+
                             </div> <!-- col// -->
                         </div> <!-- row // -->
                         <div class="row">
@@ -182,7 +238,7 @@
                                         <img src="/admin/assets/imgs/card-brands/2.png" class="border" height="20">
                                         <%= order.payment %> <br>
                                             Business name: Grand Market LLC <br>
-                                            Phone: +1 (800) 555-154-52
+                                            Phone: 7025810797
                                     </p>
                                 </div>
                                 <div class="h-25 pt-4">
@@ -211,5 +267,95 @@
     <br>
     <br>
     <br>
+
+    <script>
+        function conformReturn(id,orderId){
+
+            
+           
+        swal({
+        title: "Are you sure?",
+        text: "Once Return, you will not be able to recover this Product!",
+        icon: "warning",
+        content: {
+        element: "input",
+        attributes: {
+        placeholder: "Enter Return Reason",
+        }},
+        buttons: true,
+        dangerMode: true,
+        })
+
+
+        .then((willDelete) => 
+        {
+            
+            
+        if (willDelete) {
+            
+        swal("Poof! Your imaginary file has been deleted!", {
+        icon: "success",
+        });
+             location.href=`/api/user/return?id=${id}&orderId=${orderId}`
+        } else {
+            
+            if(willDelete == ""){
+                Swal.fire({
+                              title: "Please enter return reason",
+                             
+                              icon: "error",
+                              timer: 1000,
+                              showConfirmButton: false, // This removes the button
+                            });
+                
+            }
+            else{
+                Swal.fire({
+                              title: "Return Cancel Success",
+                             
+                              icon: "error",
+                              timer: 1000,
+                              showConfirmButton: false, // This removes the button
+                            });
+
+            }
+            
+        }
+        });
+        
+        }
+        </script>
+        
+        <script>
+        function conformCansel(id,orderId){
+            swal({
+        title: "Are you sure?",
+        text: "Once Cansel, you will not be able to recover this Product!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        })
+        .then((willDelete) => {
+        if (willDelete) {
+        swal("Poof! Your imaginary file has been deleted!", {
+        icon: "success",
+        });
+            location.href=`/api/user/cancelOrder?id=${id}&orderId=${orderId}`
+        } else {
+            Swal.fire({
+                              title: "Cansel Success",
+                             
+                              icon: "error",
+                              timer: 1000,
+                              showConfirmButton: false, // This removes the button
+                            });
+        }
+        });
+        
+        }
+        
+        
+        
+        </script>
 
     <%- include('footer') %>

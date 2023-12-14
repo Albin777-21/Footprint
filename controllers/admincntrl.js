@@ -1,5 +1,8 @@
 const asyncHandler = require('express-async-handler')
-const User = require('../model/userModel')
+const User = require('../model/userModel');
+const Product = require('../model/productModel');
+const Order=require('../model/orderModel')
+const Category=require('../model/categoryModel')
 
 
 //admin login
@@ -12,13 +15,72 @@ const loginAdmin = asyncHandler(async(req,res)=>{
 
 }
 }) 
+
+//Load dashboard
+
 const adminDashboard = asyncHandler(async (req,res) => {
-    try{
-        res.render('dashboard')
-    } catch(error)
-    {
-console.log('Error happened at admin dashboard',error);
-    }
+   try {
+    const products=await Product.find()
+    const orders=await Order.find({status:'delivered'})
+    const category=await Category.find()
+    const users=await User.find()
+    
+    const latestOrders=await Order.find().sort({createdOn:-1}).limit(5)
+
+    const productCount=products.length
+    const orderCount=orders.length
+    const categoryCount=category.length
+
+    const totalRevenue=orders.reduce((total,order)=>total+order.totalPrice,0)
+    console.log("This is total Revenue",totalRevenue);
+
+    //THIS IS FOR THE SALES GRAPH
+
+    const monthlySales=await Order.aggregate([
+        {
+            $match:{
+                status:'delivered',//Filter by status
+            },
+        },
+        {
+            $group:{
+                _id:{
+                    $month:'$createdOn',
+                },
+                count:{$sum:1},
+            },
+        },
+        {
+            $sort:{
+                '_id':1,
+            },
+        },
+    ])
+    const monthlySalesArray=Array.from({length:12},(_,index)=>{
+        const monthData=monthlySales.find((item)=>item._id===index+1)
+        return monthData?monthData.count:0
+    })
+
+    //THIS IS FOR THE SALES GRAPH -END-
+
+    //THIS IS FOR THE PRODUCT DATA
+    const productsPerMonth=Array(12).fill(0)
+    // ITERATE THROUGH EACH PRODUCT
+    products.forEach(product=>{
+        //EXTRACT MONTH FROM THE CREATED TIMESTAMP
+        const creationMonth=product.createdAt.getMonth()
+        //INCREMENT THE COUNT FOR THE CORRESPONDING MONTH
+        productsPerMonth[creationMonth]++
+    })
+    //THIS IS FOR THEP PRODUCT DATA END
+    res.render('dashboard',{totalRevenue,orderCount,productCount,categoryCount,monthlySalesArray,productsPerMonth,latestOrders})
+    
+   } catch (error) {
+    console.log('Error happens in the admin Ctrl admindashboard function',error);
+
+    res.status(500).send('Internal server error')
+    
+   }
 })
 
 //admin verificaion

@@ -5,6 +5,7 @@ const { allCategory,addCategory,editCategory, deleteCategory,updateCategory,unli
 const {allProducts,addProduct,createProduct,editProduct,productEdited,unlistProduct,listProduct,deleteProduct,searchProduct}=require("../controllers/productCtrl");
 const {adminOrderDetails,changeStatusCanceled,changeStatusConfirmed,changeStatusDelivered,changeStatusReturned,changeStatusShipped,changeStausPending,adminOrderList,allOrderDetails, loadsalesReport, salesReport}=require('../controllers/orderCtrl')
 const {loadCoupon,addCoupon,coupon,editCoupon,deleteCoupon,updateCoupon}=require('../controllers/couponCtrl')
+const{productOfferpage,updateOffer,categoryOffer,updateCategoryOffer}=require('../controllers/offerCtrl')
 router.set('view engine','ejs'); 
 router.set('views','./views/admin');
 const {upload}=require('../multer/multer');
@@ -79,6 +80,13 @@ router.get('/deleteCoupon',isAdminAuth,deleteCoupon);
 
 router.get('/loadsalesReport',isAdminAuth,loadsalesReport)
 router.get('/salesReport',isAdminAuth,salesReport)
+
+//OFFER 
+
+router.get('/productOfferpage',isAdminAuth,productOfferpage)
+router.post('/updateOffer',isAdminAuth,updateOffer)
+router.get('/categoryOffer',isAdminAuth,categoryOffer)
+router.post('/updateCategoryOffer',isAdminAuth,updateCategoryOffer)
 
 
 module.exports=router;
