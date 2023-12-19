@@ -31,7 +31,7 @@ const loadIndex = asyncHandler(async (req, res) => {
         res.render('index', { user, product, category: category })
     } catch (error) {
         console.log("error happens in userController loadIndex function ", error);
-        console.log('This is for github')
+       
 
 
     }
@@ -63,6 +63,12 @@ const emailForgot = asyncHandler(async (req, res) => {
 const registerUser = async (req, res) => {
     console.log('mmmmmmm', req);
     try {
+        if (req.query.id) {
+            req.session.referel = req.query.id;
+            console.log(req.session.referel, "sessionnnnn");
+          }
+
+      
         res.render('registration')
     } catch (error) {
         console.log(error.message);
@@ -105,7 +111,7 @@ const createUser = asyncHandler(async (req, res) => {
                 to: email,
                 subject: "verify Your Account",
                 text: `your OTP is:${otp}`,
-                html: `<b> <h4> Your OTP ${otp}<h4>  <br> <a href="/user/emailOTP/">Click here</a><b>`,
+                html: `<b> <h4> Your OTP ${otp}<h4>  <br> <a href="/emailOTP/">Click here</a><b>`,
             })
             if (info) {
                 req.session.userOTP = otp;
@@ -200,32 +206,73 @@ const verifyUser = asyncHandler(async (req, res) => {
 
 
 // Email verified
-const emailVerified = asyncHandler(async (req, res) => {
+const emailVerified = async (req, res) => {
     try {
-        const enteredOTP = req.body.otp;
-        const sessionOTP = req.session.userOTP;
+        console.log('req.body of email ::::');
+        console.log(req.body.otp);
 
-        if (enteredOTP === sessionOTP) {
-            const userData = req.session.userData;
+        const enteredOTP = req.body.otp;
+        console.log('this is the entered otp', enteredOTP);
+        console.log('this is the session otp', req.session.userOTP);
+
+        // Check if OTP is expired
+        const currentTimestamp = Date.now();
+        const otpTimestamp = req.session.otpTimestamp;
+        const otpExpirationTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+        if (currentTimestamp - otpTimestamp > otpExpirationTime) {
+            console.log('OTP has expired');
+            return res.render('emailOtp', { message: 'OTP has expired. Please request a new one.' });
+        }
+
+        if (enteredOTP === req.session.userOTP) {
+            const user = req.session.userData;
+            console.log(user, 'this is user data');
+
             const saveUserData = new User({
-                username: userData.username,
-                email: userData.email,
-                mobile: userData.mobile,
-                password: userData.password,
+                username: user.username,
+                email: user.email,
+                mobile: user.mobile,
+                password: user.password,
             });
+
+            if (req.session.referel) {
+                const id = req.session.referel;
+                console.log(id, 'this is id ');
+                const referUser = await User.findById(id);
+                saveUserData.wallet = 200;
+                referUser.wallet += 200;
+
+                const history = {
+                    amount: 200,
+                    status: 'credit',
+                    timestamp: Date.now(),
+                };
+
+                saveUserData.history.push(history);
+                referUser.history.push(history);
+
+                const user = await User.findById(req.session.referel);
+                user.wallet += 200;
+                user.history.push(history);
+                await user.save();
+            }
 
             const savedUser = await saveUserData.save();
             req.session.user = savedUser._id;
-            console.log('User registered successfully:', savedUser);
-            res.redirect('/');
+            console.log('this is saved user data >>>>>>>>>>>>>>>>>>>>>>>>', savedUser);
+
+            return res.redirect('/');
         } else {
-            console.log('Invalid OTP entered');
-            return res.render('emailOtp', { message: 'Invalid OTP entered' });
+            console.log('Invalid OTP');
+            return res.render('emailOtp', { message: 'Entered OTP is invalid. Please enter the correct OTP.' });
         }
     } catch (error) {
-        console.log('Error in userController emailVerified function', error);
+        console.log('User email verification error', error);
+        return res.status(500).send('Internal Server Error');
     }
-});
+};
+
 
 
 //user logout

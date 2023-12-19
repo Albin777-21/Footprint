@@ -3,7 +3,7 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Order List </h2>
+                    <h2 class="content-title card-title">Sales Report</h2>
                     <br><br>
                     <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="filterOrders">
                         <option value="all">Report</option>
@@ -50,7 +50,7 @@
         <% for (let i=0; i < orders.length;i++) { %>
             <% for (let j = 0; j < orders[i].product.length; j++) { %>
             <tr>
-                <td><%= i%></td>
+                <td><%= i+1%></td>
                 <td><b><%= orders[i].product[j].title  %></b></td>
                
                 <td>₹<%= orders[i].totalPrice %></td>

@@ -25,7 +25,12 @@ var categorySchema = new mongoose.Schema({
     status:{
         type:Boolean,
         default:false
+    },
+    
+    offerPrice:{
+        type:Number,
     }
+    
     
 });
 

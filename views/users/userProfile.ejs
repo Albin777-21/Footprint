@@ -51,6 +51,9 @@
                                                 aria-selected="true"><i class="fi-rs-user mr-10"></i>Change Password</a>
                                         </li>
                                         <li class="nav-item">
+                                            <a class="nav-link"onclick="referal('<%= user._id%>')" ><i class="fi-rs-user mr-10"></i><i class="fi-rs-user mr-10"></i> Refer Your Freinds </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link" href="/logout"><i
                                                     class="fi-rs-sign-out mr-10"></i>Logout</a>
                                         </li>
@@ -396,32 +399,36 @@
                                             <div class="card-header">
                                                 <h5 class="mb-0">Wallet Transaction</h5>
                                             </div>
-                                            <div class="card-body contact-from-area">
-                                                <p>To track your order please enter your OrderID in the box below and
-                                                    press "Track" button. This was given to you on your receipt and in
-                                                    the confirmation email you should have received.</p>
-                                                <div class="row">
-                                                    <div class="col-lg-8">
-                                                        <form class="contact-form-style mt-30 mb-50" action="#"
-                                                            method="post">
-                                                            <div class="input-style mb-20">
-                                                                <label>Order ID</label>
-                                                                <input name="order-id"
-                                                                    placeholder="Found in your order confirmation email"
-                                                                    type="text" class="square">
-                                                            </div>
-                                                            <div class="input-style mb-20">
-                                                                <label>Billing email</label>
-                                                                <input name="billing-email"
-                                                                    placeholder="Email you used during checkout"
-                                                                    type="email" class="square">
-                                                            </div>
-                                                            <button class="submit submit-auto-width"
-                                                                type="submit">Track</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>id</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Total</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <% for (let i=0; i < user.history.length;i++) { %>
+                                                    <tr>
+                                                        <td><%=i+1%></td>
+                                                        <td><%= new Date(user.history[i].timestamp).toLocaleDateString() %></td>
+                                                      
+                                                        <td><%= user.history[i].status %></td>
+                                                        <td>₹<%= (user.history[i].amount ).toFixed(2)%> </td>
+                                                        
+                                                    </tr>
+
+                                                    <% } %> 
+                                                   
+                                                   
+                                               
+                                               
+                                                
+                                            </tbody>
+                                        </table>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="address" role="tabpanel"
@@ -660,6 +667,37 @@
             </div>
         </section>
     </main>
+    <script>
+        function referal(id) {
+          var copyText = `http://localhost:5000/register?id=${id}`;
+          
+         
+          Swal.fire({
+        
+            icon: 'success',
+            title: 'Copied SuccessFull',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        
+        
+        
+          navigator.clipboard.writeText(copyText)
+            .then(function() {
+              console.log("Text copied to clipboard: " + copyText);
+              
+              // If you want to close something with the class 'close-container' here
+              var noThanksButton = document.querySelector('.close-container button');
+              if (noThanksButton) {
+                noThanksButton.click();
+              }
+            })
+            .catch(function(err) {
+              console.error("Failed to copy text: " + err);
+            });
+        }
+        
+            </script>
     <script>
         $(document).ready(function () {
             // Handle form submission when "Add Money" button is clicked

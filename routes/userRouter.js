@@ -41,13 +41,13 @@ const { loginUser,
 
 
 
-const {isLogged,isLoggedOut}=require('../middleware/userAuth');
+const {isLogged,isLoggedOut,isBlocked}=require('../middleware/userAuth');
 
 const { aProductPage, shopProduct } = require('../controllers/productCtrl');
 
 const { getCart, addToCart, deleteCart, modifyCartQuantity, deleteCartItem, } = require('../controllers/cartCtrl')
 
-const {checkOut,OrderPlaced,orderDetails,orderPage,allOrderDetails,cancelOrder,returnOrder,useWallet, verifyPayment, buyNow, buynowPlaceOrder}=require('../controllers/orderCtrl')
+const {checkOut,OrderPlaced,orderDetails,orderPage,allOrderDetails,cancelOrder,returnOrder,useWallet, verifyPayment, buyNow,}=require('../controllers/orderCtrl')
 
 const { Wishlist, addToList, deleteWishlistItem }=require('../controllers/wishlistCtrl');
 
@@ -78,9 +78,9 @@ router.get('/logout', auth.isLogged, logout)
 router.get('/forgotPassword',forgotPsdPage);
 router.post('/forgotEmailValid',forgotEmailValid);
 router.post('/forgotPsdOTP', forgotPsdOTP);
-router.post('/updatePassword', updatePassword);
+router.post('/updatePassword',isBlocked, updatePassword);
 router.get('/emailForgot',emailForgot)
-router.post('/changeUserPassword',changePassword)
+router.post('/changeUserPassword',isBlocked,changePassword)
 
 // Blocked route
 router.get('/blocked', (req, res) => {
@@ -93,78 +93,81 @@ router.get('/blocked', (req, res) => {
 
 //User Profile
 
-router.get('/profile',isLogged,userProfile)
-router.post('/addProfilePic',isLogged,upload.single('image'),addProfilePic)
-router.get('/editProfile',isLogged,editProfile)
-router.post('/updateProfile',isLogged,updateProfile)
+router.get('/profile',isLogged,isBlocked,userProfile)
+router.post('/addProfilePic',isLogged,isBlocked,upload.single('image'),addProfilePic)
+router.get('/editProfile',isLogged,isBlocked,editProfile)
+router.post('/updateProfile',isLogged,isBlocked,updateProfile)
 
 //User Address
-router.get('/addAddressPage', auth.isLogged, processNewAddress); // Add this line for processing new addresses
-router.post('/addUserAddress',isLogged,addUserAddress)
-router.get('/editAddress',isLogged,editAddress)
-router.post('updateAddress',isLogged,updateAddress)
-router.get('/deleteAddress',isLogged,deleteAddress)
-router.post('/processNewAddress',auth.isLogged,checkoutAddress)
+router.get('/addAddressPage', auth.isLogged,isBlocked, processNewAddress); // Add this line for processing new addresses
+router.post('/addUserAddress',isLogged,isBlocked,addUserAddress)
+router.get('/editAddress',isLogged,isBlocked,editAddress)
+router.post('updateAddress',isLogged,isBlocked,updateAddress)
+router.get('/deleteAddress',isLogged,isBlocked,deleteAddress)
+router.post('/processNewAddress',auth.isLogged,isBlocked,checkoutAddress)
 
 //Products
-router.get('/aProduct', upload.single('images'), aProductPage)
- router.get('/shop',shopProduct)
+router.get('/aProduct',auth.isBlocked, upload.single('images'), aProductPage)
+ router.get('/shop',isBlocked,shopProduct)
 
  //Cart
- router.get('/cart',isLogged,getCart)
- router.get('/addToCart',auth.isLogged,addToCart)
- router.get('/deleteCartItem',deleteCartItem)
- router.post('/modifyCartQuantity',auth.isLogged,modifyCartQuantity)
- router.get('/deleteCart',auth.isLogged,deleteCart)
+ router.get('/cart',isLogged,auth.isBlocked,getCart)
+ router.get('/addToCart',auth.isLogged,auth.isBlocked,addToCart)
+ router.get('/deleteCartItem',isBlocked,deleteCartItem)
+ router.post('/modifyCartQuantity',auth.isLogged,isBlocked,modifyCartQuantity)
+ router.get('/deleteCart',auth.isLogged,isBlocked,deleteCart)
 
  //Order
- router.get('/checkout',auth.isLogged,checkOut)
- router.post('/orderPlaced',auth.isLogged,OrderPlaced)
- router.get('/orderDetails',auth.isLogged,orderDetails)
- router.get('/orderPage',auth.isLogged,orderPage)
- router.get('/allOrderDetails',auth.isLogged,allOrderDetails)
- router.get('/cancelOrder',auth.isLogged,cancelOrder)
- router.get('/return',auth.isLogged,returnOrder)
- router.post('/verifyPayment',auth.isLogged,verifyPayment)
- router.get('/buyNow',auth.isLogged,buyNow)
- router.post('buynowPlaceOrder',auth.isLogged,buynowPlaceOrder)
+ router.get('/checkout',auth.isLogged,isBlocked,checkOut)
+ router.post('/orderPlaced',auth.isLogged,isBlocked,OrderPlaced)
+ router.get('/orderDetails',auth.isLogged,isBlocked,orderDetails)
+ router.get('/orderPage',auth.isLogged,isBlocked,orderPage)
+ router.get('/allOrderDetails',auth.isLogged,isBlocked,allOrderDetails)
+ router.get('/cancelOrder',auth.isLogged,isBlocked,cancelOrder)
+ router.get('/cancelOrder',auth.isLogged,isBlocked,cancelOrder)
+ router.get('/cancelOrder',auth.isLogged,isBlocked,cancelOrder)
+ router.get('/cancelOrder',auth.isLogged,isBlocked,cancelOrder)
+ router.get('/return',auth.isLogged,isBlocked,returnOrder)
+ router.post('/verifyPayment',auth.isLogged,isBlocked,verifyPayment)
+ router.get('/buyNow',auth.isLogged,isBlocked,checkOut)
+
  
 
 //Wishlist
-router.get('/Wishlist',auth.isLogged,Wishlist)
-router.get('/addToList',auth.isLogged,addToList)
-router.get('/deleteWishlistItem',auth.isLogged,deleteWishlistItem)
+router.get('/Wishlist',auth.isLogged,isBlocked,Wishlist)
+router.get('/addToList',auth.isLogged,isBlocked,addToList)
+router.get('/deleteWishlistItem',auth.isLogged,isBlocked,deleteWishlistItem)
 
 //Filter 
 
-router.post('/productSearch',productSearch);
-router.get('/CategoryFilter',CategoryFilter);
-router.post('/filterSearch',filterSearch);
-router.get('/priceFilter',priceFilter);
-router.get('/brandFilter',brandFilter);
-router.get('/sizeFilter',sizeFilter);
-router.get('/clearFilter',clearFilter);//clear all the filter 
-router.get('/sortByPrice',sortByPrice);
-router.get('/colorFilter',colorFilter);
+router.post('/productSearch',isBlocked,productSearch);
+router.get('/CategoryFilter',isBlocked,CategoryFilter);
+router.post('/filterSearch',isBlocked,filterSearch);
+router.get('/priceFilter',isBlocked,priceFilter);
+router.get('/brandFilter',isBlocked,brandFilter);
+router.get('/sizeFilter',isBlocked,sizeFilter);
+router.get('/clearFilter',isBlocked,clearFilter);//clear all the filter 
+router.get('/sortByPrice',isBlocked,sortByPrice);
+router.get('/colorFilter',isBlocked,colorFilter);
 
 
 //Wallet 
 
-router.post('/addMoneyWallet',isLogged,addMoneyWallet)
-router.post('/updateMongoWallet',isLogged,updateMongoWallet)
-router.post('/useWallet',isLogged,useWallet)
-router.get('/sumWalletBuynow',isLogged,sumWalletBuynow)
-router.post('/walletPayment',isLogged,walletPayment)
-router.post('/sumWallet',sumWallet);
+router.post('/addMoneyWallet',isLogged,isBlocked,addMoneyWallet)
+router.post('/updateMongoWallet',isLogged,isBlocked,updateMongoWallet)
+router.post('/useWallet',isLogged,isBlocked,useWallet)
+router.get('/sumWalletBuynow',isLogged,isBlocked,sumWalletBuynow)
+router.post('/walletPayment',isLogged,isBlocked,walletPayment)
+router.post('/sumWallet',isBlocked,sumWallet);
 
 
 
-router.post('/validateCoupon',validateCoupon);
+router.post('/validateCoupon',isBlocked,validateCoupon);
 
 //INVOICES
 
-router.get('/invoice',isLogged,invoice)
-router.get('/invoices',isLogged,invoices)
+router.get('/invoice',isLogged,isBlocked,invoice)
+router.get('/invoices',isLogged,isBlocked,invoices)
 
 
 

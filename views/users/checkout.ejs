@@ -110,6 +110,10 @@
                                 <td colspan="2"><em>Free Shipping</em></td>
                               </tr>
                               <tr>
+                                <th>Discount Price</th>
+                                <td colspan="2" id="discountPrice">₹0</td>
+                            </tr>
+                              <tr>
                                 <th>Total</th>
                                 <td colspan="2" class="product-subtotal">
                                   <span id="totalValue" value="<%= sum %>" class="font-xl text-brand fw-900">₹<%= sum %>
@@ -321,62 +325,66 @@
   <script>
 
 
-    function applyCoupon() {
-      swal({
+function applyCoupon() {
+    swal({
         text: 'Apply your coupon code here !!!',
         content: 'input',
         button: {
-          text: 'Apply!',
-          closeModal: false,
+            text: 'Apply!',
+            closeModal: false,
         },
-      })
-        .then(couponCode => {
-          if (!couponCode) {
+    })
+    .then(couponCode => {
+        if (!couponCode) {
             throw null; // No coupon code provided, so exit without making an AJAX request
-          }
+        }
 
-          // Perform an AJAX request here with the couponCode
-          fetch('/validateCoupon', {
+        // Perform an AJAX request here with the couponCode
+        fetch('/validateCoupon', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({ couponCode }), // Send the couponCode in the request body
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.isValid) {
-
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.isValid) {
                 const displayedSum = document.getElementById('totalValue').textContent;
                 const numericValue = parseFloat(displayedSum.replace(/[^\d.]/g, ''));
-                const couponOfferPrice = parseFloat(data.coupon.offerPrice);
-                const newSum = numericValue - couponOfferPrice;
+                const couponDiscountPrice = parseFloat(data.coupon.offerPrice);
+
+                // Calculate the new sum after applying the discount
+                const newSum = Math.max(numericValue - couponDiscountPrice, 0);
 
                 // Update the displayedSum value on the webpage
                 const displayedSumElement = document.getElementById('totalValue');
                 displayedSumElement.textContent = '₹' + newSum.toFixed(2);
 
+                // Update the displayed discount price
+                const discountPriceElement = document.getElementById('discountPrice');
+                discountPriceElement.textContent = '₹' + couponDiscountPrice.toFixed(2);
+
                 swal('Coupon Valid!', `Coupon code '${couponCode}' is valid.`);
-
-
-              } else {
+            } else {
                 swal('Invalid Coupon', `Coupon code '${couponCode}' is not valid.`);
-              }
-            })
-            .catch(error => {
-              console.error('Error occurred during AJAX request:', error);
-              swal('Error', 'An error occurred while processing your request.', 'error');
-            });
+            }
         })
         .catch(error => {
-          if (error) {
+            console.error('Error occurred during AJAX request:', error);
+            swal('Error', 'An error occurred while processing your request.', 'error');
+        });
+    })
+    .catch(error => {
+        if (error) {
             swal('Oh noes!', 'An error occurred!', 'error');
-          } else {
+        } else {
             swal.stopLoading();
             swal.close();
-          }
-        });
-    }
+        }
+    });
+}
+
 
 
 
@@ -416,10 +424,11 @@
 
 
     async function placeOrder(userId) {
+
+      alert('pre-start')
       var address = $('.address:checked').val();
       var payment = $('.payment:checked').val();
       
-      alert('pre-start')
 
 
       const displayedSum = document.getElementById('totalValue').textContent;
@@ -442,6 +451,7 @@
           timer: 3000,
         });
       } else {
+        alert('hereeeeee')
         $.ajax({
           url: '/orderPlaced',
           method: 'POST',

@@ -63,7 +63,13 @@ const productSchema = new mongoose.Schema({
     isDeleted:{
         type:Boolean,
         default:false
+    },
+    offerPrice:{
+        type:Number,
+        
     }
+    
+  
    
     
 },{timestamps:true});

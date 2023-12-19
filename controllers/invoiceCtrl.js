@@ -14,7 +14,7 @@ const mongodb = require("mongodb");
 
 const invoice = asyncHandler(async (req, res) => {
   try {
-    console.log('This is quirey >>>>>>', req.query);
+    console.log('This is query >>>>>>', req.query);
 
     const user = await User.findById(req.session.user)
     const order = await Order.findById(req.query.id)

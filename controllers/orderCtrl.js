@@ -506,90 +506,133 @@ const verifyPayment=asyncHandler(async(req,res)=>{
   
   //BUYNOW
 
+
   const buyNow=asyncHandler(async(req,res)=>{
     try {
-        const product=await Product.findById(req.query.id)
-        if(product.quantity>=1){
-            const id=req.session.user
-            const user=await User.findById(id)
-            const coupon=await Coupon.find({
-                'user.userId':{$ne:user._id}
-            })
-            let sum=product.price
-            res.render('buyNow',{user,product,sum,coupon})
+        const product= await Product.findById(req.query.id)
+  
+  
+        if(product.quantity >=1 ){
+          
+  
+            const id = req.session.user
+            const user = await User.findById(id)
+            const coupon = await Coupon.find({
+                'user.userId': { $ne: user._id }
+            });
+            
+           
+            
+           let sum= product.price 
+            res.render('checkout', { user, product, sum ,coupon})
+  
         }else{
-             res.redirect(`/aProduct?id=${product._id}`)
+            res.redirect(`/aProduct?id=${product._id}`)
         }
+       
+  
+  
+  
     } catch (error) {
-        console.log("Error Occured in orderctrl buyNow",error);
-        res.status(500).send('Internal server error')
+        console.log('Error occurred in orderCTrl buyNOw:', error);
         
     }
+  
   })
-
-  //BUYNOW PLACE ORDER
-
+  //buy now place order--------------------------------------------------------------------
+  
   const buynowPlaceOrder=asyncHandler(async(req,res)=>{
     try {
-        const{totalPrice,createdOn,date,payment,addressId,prId}=req.body
+        // console.log(req.body);
+        const {totalPrice,createdOn,date,payment,addressId,prId}=req.body
+        // console.log(addressId);
         const userId=req.session.user
-        const user=await User.findById(userId)
-
-        const address=user.address.find(item=>item._id.toString()===addressId)
+        const user= await User.findById(userId);
+       
+  
         
-        const productDetail=await Product.findById(prId)
-
-        const productDetails={
-            productId:productDetail._id,
-            price:productDetail.price,
-            title:productDetail.title,
-            image:productDetail.images[0],
-            quantity:1
-        }
-
-        const order=new Order({
-            totalPrice:totalPrice,
-            createdOn:createdOn,
+        // console.log('product is +>>>>>>>>>>>>>>>>>>>>>>>>>',user.address);
+  
+        const address = user.address.find(item => item._id.toString() === addressId);
+  
+      
+        const productDetail = await Product.findById(prId);
+  
+       
+      const productDetails={
+        ProductId:productDetail._id,
+        price:productDetail.price,
+        title:productDetail.title,
+        image:productDetail.images[0],
+        quantity:1
+  
+  
+      }
+  
+  
+        // console.log('this the produxt that user by ',orderProducts);
+       
+        const oder = new Order({
+            totalPrice:totalPrice,    
+            createdOn: createdOn,
             date:date,
             product:productDetails,
             userId:userId,
             payment:payment,
             address:address,
             status:'confirmed'
-
+    
         })
-
-        const orderDb=await order.save()
-
-        productDetails.quantity=productDetails.quantity-1
-        await productDetail.save()
-
-        if(order.payment=='cod'){
-            console.log("I am the cod method")
-            res.json({payment:true,method:'cod',order:orderDb,qty:1,orderId:user})
-        }else if(order.payment=='online'){
-            console.log('I am the razor method')
-            const generatedOrder=await generateOrderRazorpay(orderDb._id,orderDb.totalPrice)
-            res.json({payment:true,method:"online",razorpayOrder:generatedOrder,order:orderDb,orderId:user,qty:1})
-        }else if(order.payment=='wallet'){
-            const a=user.wallet-=totalPrice;
-            const  transaction={
-                amount:a,
-                status:'debit',
-                timestamp:new Date(),
-            }
-            user.history.push(transaction)
-
-            await user.save()
-            res.json({payment:true,method:'wallet'})
-        }
-    } catch (error) {
-        console.log("Error in the buynowOrderplaced function",error)
-        res.status(500).send('Internal server error')
+         const oderDb = await oder.save()
+         //-----------part that dicrese the qunatity od the cutent product --
+       
+         productDetails.quantity= productDetails.quantity-1      
+         await productDetail.save();
+            
         
-    }
+         //-------------------------------  
+         
+         if(oder.payment=='cod'){
+           console.log('yes iam the cod methord');
+            res.json({ payment: true, method: "cod", order: oderDb ,qty:1,oderId:user});
+  
+         }else if(oder.payment=='online'){0
+           console.log('yes iam the razorpay methord');
+  0
+            const generatedOrder = await generateOrderRazorpay(oderDb._id, oderDb.totalPrice);
+            res.json({ payment: false, method: "online", razorpayOrder: generatedOrder, order: oderDb ,oderId:user,qty:1});
+                        
+         }else if(oder.payment=='wallet'){
+         const a =   user.wallet -= totalPrice;
+            const transaction = {
+                amount: a,
+                status: "debit",
+                timestamp: new Date(), // You can add a timestamp to the transaction
+            };
+        
+            // Push the transaction into the user's history array
+            user.history.push(transaction);
+  
+          
+  
+           
+             await user.save();
+    
+            
+            res.json({ payment: true, method: "wallet", });
+            
+         }
+  
+  
+  
+  
+    } catch (error) {
+        console.log('Error form oder Ctrl in the function buy now ', error);
+        
+    }
+    
   })
-
+  
   const loadsalesReport=asyncHandler(async(req,res)=>{
     try {
         const orders=await Order.find({status:'delivered'})

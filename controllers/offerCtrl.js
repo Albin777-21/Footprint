@@ -26,24 +26,32 @@ const productOfferpage=asyncHandler(async(req,res)=>{
 })
 
 //UPDATING THE PRODUCT OFFER
-const updateOffer=asyncHandler(async(req,res)=>{
+//-----------------updating the product offer---------------
+const updateOffer = asyncHandler(async (req, res) => {
     try {
-        const{id,offerPrice}=req.body
-        //FETCH THE PRODUCT BEFORE UPDATING
-        const product=await Product.findById(id)
+        console.log(req.body);
+        const { id, offerPrice } = req.body;
 
-        //UPDATE THE OFFER PRICE AND ADJUST THE PRICE ACCORDINGLY
-        product.offerPrice=offerPrice
-        product.price=product.price-offerPrice
+        // Fetch the product before updating
+        const product = await Product.findById(id);
 
-        await product.save()
+        // Update the offerPrice and adjust the price accordingly
+        product.offerPrice = offerPrice;
+        product.price = product.price - offerPrice;
+        console.log(product.price);
 
-        res.redirect('/admin/productOfferpage')
+        // Save the updated product
+        await product.save();
+
+        console.log('Updated product:', product);
+
+        res.redirect('/admin/productOfferpage');
     } catch (error) {
-        console.log('Error happens in the updateoffer function in offerctrl',error);
-        res.status(500).send("Internal Server Error")
+        console.log('Error happened in the offerctrl in the function updateOffer:', error);
+        // Handle the error appropriately, e.g., send an error response to the client
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-})
+});
 
 //OFFER FOR CATEGORY
 
@@ -77,16 +85,18 @@ const updateCategoryOffer=asyncHandler(async(req,res)=>{
         const products=await Product.find({category:category.name})
 
         //UPDATE PRICE BASED ON THE  OFFERPERCENTAGE
-        products.forEach( async(product)=>{
-            const newofferPrice=(offerPercentage/100)*product.price
-            const newPrice=product.price-newofferPrice
+        products.forEach(async (product) => {
+            if (!product.offerPrice) {
+                const newOfferPrice = (offerPercentage / 100) * product.price;
+                const newPrice = product.price - newOfferPrice;
 
-            //UPDATE THE PRODUCT
-            await Product.findByIdAndUpdate(product._id,{
-                offerPrice:newofferPrice,
-                price:newPrice
-            })
-        })
+                // Update the product
+                await Product.findByIdAndUpdate(product._id, {
+                    offerPrice: newOfferPrice,
+                    price: newPrice,
+                });
+            }
+        });
         res.redirect('/admin/productOfferpage')
 
     } catch (error) {
