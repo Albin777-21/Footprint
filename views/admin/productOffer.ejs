@@ -21,6 +21,7 @@
                     <div class="input-upload">
                         <img src="/admin/assets/imgs/category/<%= product[i].images[0] %>" alt="">
                         <form action="/admin/updateOffer" method="post">
+                          <span id="displayText"><%= product[i].title %></span>
                             <h6><label for="offer">Update Product offer</label></h6>
                             <input class="form-control" name="offerPrice" type="text" value="<%= product[i].offerPrice %>">
                             <input class="form-control" name="id" type="hidden" value="<%= product[i]._id %>">

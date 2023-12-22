@@ -75,28 +75,29 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% if (product.length> 0) { %> <% for (let i=0; i < product.length; i++) { %>
-                        <tr>
-                          <td class="image product-thumbnail">
-                            <img src="/admin/assets/imgs/category/<%= product[i].images[i] %>" alt="#" />
-                          </td>
-                          <td>
-                            <input type="hidden" id="productId" value="<%= product[i]._id %>" />
-                            <h5>
-                              <a href="shop-product-full.html">
-                                <%= product[i].title %>
-                              </a>
-                            </h5>
-                            <span class="product-qty">x <%= user.cart[i].quantity %></span>
-                          </td>
-                          <td>₹<%= product[i].price %>
-                          </td>
-                        </tr>
+                    <% if (products.length > 0) { %>
+                        <% for (let i = 0; i < products.length; i++) { %>
+                            <tr>
+                                <td class="image product-thumbnail">
+                                    <img src="/admin/assets/imgs/category/<%= products[i].images[i] %>" alt="#" />
+                                </td>
+                                <td>
+                                    <!-- Product details -->
+                                    <input type="hidden" id="productId" value="<%= products[i]._id %>" />
+                                    <h5>
+                                        <a href="shop-product-full.html">
+                                            <%= products[i].title %>
+                                        </a>
+                                    </h5>
+                                    <span class="product-qty">x 1</span>
+                                </td>
+                                <td>₹<%= products[i].price %></td>
+                            </tr>
                         <% } %>
-                          <% } else { %>
-                            <div class="card-body">
-                              <p>No Product in your cart . Please add a product .</p>
-                            </div>
+                    <% } else { %>
+                        <div class="card-body">
+                            <p>No Product in your cart. Please add a product.</p>
+                        </div>
                             <% } %>
 
                               <tr>

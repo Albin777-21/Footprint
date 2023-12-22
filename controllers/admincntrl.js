@@ -21,11 +21,67 @@ const loginAdmin = asyncHandler(async(req,res)=>{
 const adminDashboard = asyncHandler(async (req,res) => {
    try {
     const products=await Product.find()
-    const orders=await Order.find({status:'delivered'})
+    // const orders=await Order.find({status:'delivered'})
     const category=await Category.find()
     const users=await User.find()
+
+    
+    const { filter } = req.query;
+
+    let startDate, endDate;
+    const currentDate = new Date();
+
+    switch (filter) {
+        case 'today':
+            startDate = new Date(currentDate);
+            startDate.setHours(0, 0, 0, 0);
+            endDate = new Date(currentDate);
+            endDate.setHours(23, 59, 59, 999);
+            break;
+        case 'week':
+            startDate = new Date(currentDate);
+            startDate.setDate(currentDate.getDate() - currentDate.getDay()); // set to the first day of the week (Sunday)
+            startDate.setHours(0, 0, 0, 0);
+            endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 6); // set to the last day of the week (Saturday)
+            endDate.setHours(23, 59, 59, 999);
+            break;
+        case 'month':
+            startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59, 999);
+            break;
+        case 'year':
+            startDate = new Date(currentDate.getFullYear(), 0, 1);
+            endDate = new Date(currentDate.getFullYear(), 11, 31, 23, 59, 59, 999);
+            break;
+            case 'custom':
+                startDate = req.query.startDate ? new Date(req.query.startDate) : null;
+                endDate = req.query.endDate ? new Date(req.query.endDate) : null;
+
+                // Adjust the end date to the end of the selected day
+                if (endDate) {
+                    endDate.setHours(23, 59, 59, 999);
+                }
+                break;
+            default:
+                // Default to all data
+                startDate = null;
+                endDate = null;
+                break;
+    }
+
+    const orders = await Order.find({
+        status: 'delivered',
+        createdOn: {
+            $gte: startDate,
+            $lt: endDate,
+        },
+    });
+    
     
     const latestOrders=await Order.find().sort({createdOn:-1}).limit(5)
+    
+
 
     const productCount=products.length
     const orderCount=orders.length
@@ -73,7 +129,7 @@ const adminDashboard = asyncHandler(async (req,res) => {
         productsPerMonth[creationMonth]++
     })
     //THIS IS FOR THEP PRODUCT DATA END
-    res.render('dashboard',{totalRevenue,orderCount,productCount,categoryCount,monthlySalesArray,productsPerMonth,latestOrders})
+    res.render('dashboard',{totalRevenue,orderCount,productCount,categoryCount,monthlySalesArray,productsPerMonth,latestOrders,deliveredOrders:orders})
     
    } catch (error) {
     console.log('Error happens in the admin Ctrl admindashboard function',error);

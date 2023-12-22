@@ -358,12 +358,12 @@ const userProfile = asyncHandler(async (req, res) => {
     try {
         const userId = req.session.user
         const user = await User.findById(userId)
-        const order = await Order.find({ userId: userId }).sort({ createdOn: -1 });
+        const orders = await Order.find({ userId: userId }).sort({ createdOn: -1 });
 
 
 
         console.log(user);
-        res.render('userProfile', { user, order })
+        res.render('userProfile', { user, orders })
     } catch (error) {
         console.log('Error in the userProfile', error);
 

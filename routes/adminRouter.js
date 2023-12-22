@@ -81,6 +81,7 @@ router.get('/deleteCoupon',isAdminAuth,deleteCoupon);
 router.get('/loadsalesReport',isAdminAuth,loadsalesReport)
 router.get('/salesReport',isAdminAuth,salesReport)
 
+
 //OFFER 
 
 router.get('/productOfferpage',isAdminAuth,productOfferpage)

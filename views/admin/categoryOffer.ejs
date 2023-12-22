@@ -21,6 +21,7 @@
                     <div class="input-upload">
                         <img src="/admin/assets/imgs/category/<%= category[i].image %>" alt="">
                         <form action="/admin/updateCategoryOffer" method="post">
+                          <span id="displayText"><%= category[i].name %></span>
                             <h6><label for="offer">Update Category offer</label></h6>
                             <input class="form-control" name="offerPercentage" type="text">
                             <input class="form-control" name="id" type="hidden" value="<%= category[i]._id %>">

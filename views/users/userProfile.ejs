@@ -51,7 +51,9 @@
                                                 aria-selected="true"><i class="fi-rs-user mr-10"></i>Change Password</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link"onclick="referal('<%= user._id%>')" ><i class="fi-rs-user mr-10"></i><i class="fi-rs-user mr-10"></i> Refer Your Freinds </a>
+                                            <a class="nav-link" id="change-password-tab" data-bs-toggle="tab"
+                                                href="#changeUserOrder" role="tab" aria-controls="change-password"
+                                                aria-selected="true"><i class="fi-rs-user mr-10"></i>Refer a Friend</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="/logout"><i
@@ -103,7 +105,7 @@
                                                                         <br>
 
                                                                         <span>
-                                                                            <h5>Ballence:₹<%= user.wallet.toFixed(2) %>
+                                                                            <h5>Balance:₹<%= user.wallet.toFixed(2) %>
                                                                             </h5>
                                                                         </span>
                                                                         <br>
@@ -323,40 +325,88 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="table-responsive">
-                                                    <table class="table">
+                                                    <table class="table table-hover">
                                                         <thead>
                                                             <tr>
-                                                                <th>Order</th>
-                                                                <th>Date</th>
-                                                                <th>Status</th>
-                                                                <th>Total</th>
-                                                                <th>Actions</th>
+                                                                <!-- <th>#ID</th> -->
+                                                                <th scope="col">Name</th>
+                                                               
+                                                                <th scope="col">Total</th>
+                                                                <th scope="col">Status</th>
+                                                                <th scope="col">Date</th>
+                                                                <th scope="col" class="text-end"> Action </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <% for (let i=1; i < order.length;i++) { %>
+                                                            <% if (orders.length> 0) { %>
+                                                            <% for (let i=0; i < orders.length;i++) { %>
+                                                                <% for (let j = 0; j < orders[i].product.length; j++) { %>
                                                                 <tr>
-                                                                    <td>
-                                                                        <%= i%>
+                                                                    <!-- <td><%= orders[i]._id %></td> -->
+                                                                    <td><b><%= orders[i].product[j].title  %></b></td>
+                                                                   
+                                                                    <td>₹<%= orders[i].totalPrice %></td>
+                        
+                                                                    <% if (orders[i].status=='pending') { %>
+                        
+                                                                        <td><span class="badge rounded-pill alert-warning">Pending</span></td>
+                                                                        <% } else if(orders[i].status=='confirmed'){ %>
+                                                                            <td><span class="badge rounded-pill alert-success">confirmed</span></td>
+                                                                            <% } else if(orders[i].status=='canceled'){ %>
+                                                                                <td><span class="badge rounded-pill alert-danger">Cancelled</span></td>
+                                                                        <% } else if(orders[i].status=='shipped'){ %>
+                                                                            <td><span class="badge rounded-pill alert-success">shipped</span></td>
+                                                                            <% } else if(orders[i].status=='delivered'){ %>
+                                                                                <td><span class="badge rounded-pill alert-success">delivered</span></td>
+                                                                                <% } else if(orders[i].status=='returned'){ %>
+                                                                                    <td><span class="badge rounded-pill alert-danger">returned</span></td>
+                                                        
+                                                                                <% } %>
+                                                        
+                        
+                                                                            <td><%= orders[i].createdOn.toLocaleDateString() %></td>
+                                                                    <td class="text-end">
+                                                                        <a href="/orderDetails?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                                                        <% if (orders[i].status=='pending') { %>
+                                                                        <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="btn btn-md rounded font-sm">Cancel</a>
+                                                                        <% } else if(orders[i].status=='confirmed'){ %>
+                                                                            <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="btn btn-md rounded font-sm">Cancel</a>
+                                                                           
+                        
+                                                                            <% } else if(orders[i].status=='canceled'){ %>
+                                                                                <% } else if(orders[i].status=='shipped'){ %>
+                                                                                    <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="btn btn-md rounded font-sm">Cancel</a>
+                                                                                    <% } else if(orders[i].status=='delivered'){ %>
+                                                                                        <a href="/return?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="btn btn-md rounded font-sm">Return</a>
+                                                                                        <% } else if(orders[i].status=='returned'){ %>
+                        
+                                                                            <% } %> 
+                                                                        
+                                                                    
                                                                     </td>
-                                                                    <td>
-                                                                        <%= order[i].createdOn.toLocaleDateString() %>
-                                                                    </td>
-                                                                    <td>
-                                                                        <%= order[i].status %>
-                                                                    </td>
-                                                                    <td>₹<%= (order[i].totalPrice ).toFixed(2)%>
-                                                                    </td>
-                                                                    <td><a href="/orderDetails?orderId=<%= order[i]._id %>"
-                                                                            class="btn-small d-block">View</a></td>
                                                                 </tr>
-
+                        
+                                                                <% } %> 
                                                                 <% } %>
-
-
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                      <td colspan="2">No item found in Oders</td>
+                                                                    </tr>
+                                                                    <% } %>
+                                                           
+                                                           
+                                                            
+                                                           
+                                                          
+                                                         
+                                                           
+                                                           
+                                                           
+                                                         
+                                                          
                                                         </tbody>
                                                     </table>
-                                                </div>
+                                                </div> <!-- table-responsive //end -->
                                             </div>
                                         </div>
                                     </div>
@@ -387,6 +437,25 @@
                                                     </div>
                                                 </div>
                                             </form>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="changeUserOrder" role="tabpanel" aria-labelledby="orders-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">REFERRAL</h5>
+                                            </div>
+                                    
+                                            <div class="row justify-content-center width=50% align-items-center min-vh-50">
+                                                <div class="form-group col-md-9">
+                                                    <label for="referralLink">Referral Link:</label>
+                                                    <input type="text" id="referralLink" readonly>
+                                                    <button onclick="generateReferral('<%= user._id %>')">Generate Referral</button>
+
+                                    
+                                                    <label for="referralCode">Referral Code:</label>
+                                                    <input type="text" id="referralCode" readonly>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                             
@@ -631,6 +700,7 @@
 
 
 
+
                                                             <div class="form-group col-md-6">
                                                                 <label for="addressType">
                                                                     <h5>Address Type</h5>
@@ -659,6 +729,10 @@
                                         </div>
                                     </div>
 
+
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -669,35 +743,32 @@
     </main>
     <script>
         function referal(id) {
-          var copyText = `http://localhost:5000/register?id=${id}`;
-          
-         
-          Swal.fire({
-        
-            icon: 'success',
-            title: 'Copied SuccessFull',
-            showConfirmButton: false,
-            timer: 1500
-          });
-        
-        
-        
-          navigator.clipboard.writeText(copyText)
-            .then(function() {
-              console.log("Text copied to clipboard: " + copyText);
-              
-              // If you want to close something with the class 'close-container' here
-              var noThanksButton = document.querySelector('.close-container button');
-              if (noThanksButton) {
-                noThanksButton.click();
-              }
-            })
-            .catch(function(err) {
-              console.error("Failed to copy text: " + err);
+            var referralCode = "YOUR_REFERRAL_CODE"; // Replace with your actual referral code
+            var referralLink = `http://localhost:5000/register?id=${id}&ref=${referralCode}`;
+            var copyText = `Refer a friend using this link: ${referralLink}`;
+    
+            Swal.fire({
+                icon: 'success',
+                title: 'Copied Successfully',
+                showConfirmButton: false,
+                timer: 1500
             });
+    
+            navigator.clipboard.writeText(copyText)
+                .then(function() {
+                    console.log("Text copied to clipboard: " + copyText);
+    
+                    // If you want to close something with the class 'close-container' here
+                    var noThanksButton = document.querySelector('.close-container button');
+                    if (noThanksButton) {
+                        noThanksButton.click();
+                    }
+                })
+                .catch(function(err) {
+                    console.error("Failed to copy text: " + err);
+                });
         }
-        
-            </script>
+    </script>
     <script>
         $(document).ready(function () {
             // Handle form submission when "Add Money" button is clicked
@@ -911,7 +982,29 @@
             return isValid;
         }
         </script>
+        <script>
+            function generateReferral(username) {
+                var id = username; // Replace with your actual user ID or any identifier
+                var referralCode = generateReferralCode(8); // Replace with your referral code generation logic
         
+                var referralLink = `http://localhost:5000/register?id=${id}&ref=${referralCode}`;
+        
+                document.getElementById("referralLink").value = referralLink;
+                document.getElementById("referralCode").value = referralCode;
+            }
+        
+            function generateReferralCode(length) {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let referralCode = '';
+        
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * characters.length);
+                    referralCode += characters.charAt(randomIndex);
+                }
+        
+                return referralCode;
+            }
+        </script>
       
 
 

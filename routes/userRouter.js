@@ -82,10 +82,7 @@ router.post('/updatePassword',isBlocked, updatePassword);
 router.get('/emailForgot',emailForgot)
 router.post('/changeUserPassword',isBlocked,changePassword)
 
-// Blocked route
-router.get('/blocked', (req, res) => {
-    res.render('blocked');
-  });
+
 
 
 

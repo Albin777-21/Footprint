@@ -42,6 +42,12 @@ const invoices = async (req, res) => {
     console.log('this is rede id ', id);
     const userId = req.session.user;
     const result = await Order.findById({ _id: id });
+
+    // Check if the order is delivered
+    if (result.status !== 'delivered') {
+      return res.status(400).json({ error: 'Invoice can only be generated for delivered items.' });
+    }
+    
     const user = await User.findById({ _id: userId });
     const address = result.address
     
