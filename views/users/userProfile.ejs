@@ -539,8 +539,8 @@
                                                                 </p>
                                                                 <a href="/editAddress?id=<%=user.address[i]._id %>"
                                                                     class="btn-small">Edit</a> <span> || </span>
-                                                                <a href="/deleteAddress?id=<%=user.address[i]._id %>"
-                                                                    class="btn-small">Delete</a>
+                                                                    <a href="/deleteAddress?id=<%= encodeURIComponent(user.address[i]._id) %>" class="btn-small">Delete</a>
+
 
 
                                                             </div>

@@ -86,7 +86,7 @@ const allCategory=asyncHandler(async(req,res)=>{
     try {
         const allCategory=await Category.find()
         req.session.Category=allCategory
-        res.render('category',({category:allCategory}))
+        res.render('category',({category:allCategory,message:null}))
     } catch (error) {
         console.log('This is all category error',error);
         

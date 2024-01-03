@@ -296,7 +296,7 @@
         swal("Poof! Your imaginary file has been deleted!", {
         icon: "success",
         });
-             location.href=`/api/user/return?id=${id}&orderId=${orderId}`
+             location.href=`/return?id=${id}&orderId=${orderId}`
         } else {
             
             if(willDelete == ""){
@@ -340,7 +340,7 @@
         swal("Poof! Your imaginary file has been deleted!", {
         icon: "success",
         });
-            location.href=`/api/user/cancelOrder?id=${id}&orderId=${orderId}`
+            location.href=`/cancelOrder?id=${id}&orderId=${orderId}`
         } else {
             Swal.fire({
                               title: "Cancel Success",

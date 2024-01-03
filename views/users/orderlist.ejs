@@ -47,7 +47,8 @@
                                             <!-- <td><%= orders[i]._id %></td> -->
                                             <td><b><%= orders[i].product[j].title  %></b></td>
                                            
-                                            <td>₹<%= orders[i].totalPrice %></td>
+                                            <td>₹<%= orders[i].product[j].price %></td>
+
 
                                             <% if (orders[i].status=='pending') { %>
 
@@ -92,7 +93,7 @@
                                         <% } %>
                                         <% } else { %>
                                             <tr>
-                                              <td colspan="2">No item found in Oders</td>
+                                              <td colspan="2">No item found in Orders</td>
                                             </tr>
                                             <% } %>
                                    

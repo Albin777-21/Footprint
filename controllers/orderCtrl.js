@@ -316,6 +316,7 @@ const adminOrderList = asyncHandler(async (req, res) => {
         const endindex = startindex + itemsperpage
         const totalpages = Math.ceil(orders.length / itemsperpage);
         const currentproduct = orders.slice(startindex, endindex)
+        console.log(currentproduct);
         res.render('orderList', { orders: currentproduct, totalpages, currentpage })
     } catch (error) {
         console.log('error in orderList function', error);
@@ -752,6 +753,7 @@ const salesReport = asyncHandler(async (req, res) => {
                         $lt: endDate,
                     },
                 });
+                break;
             default:
                 //Fetch all orders
                 orders = await Order.find({

@@ -67,7 +67,7 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <!-- <th>ID</th> -->
                                             <th>Product name</th>
                                             <th>Price</th>
                                             <th>Status</th>
@@ -86,7 +86,7 @@
         <% for (let i=0; i < orders.length;i++) { %>
             <% for (let j = 0; j < orders[i].product.length; j++) { %>
             <tr>
-                <td><%= i%></td>
+                <!-- <td><%= i+1%></td> -->
                 <td><b><%= orders[i].product[j].title  %></b></td>
                
                 <td>₹<%= orders[i].totalPrice %></td>
@@ -94,7 +94,7 @@
                 <% if (orders[i].status=='pending') { %>
 
                     <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                    <% } else if(orders[i].status=='conformed'){ %>
+                    <% } else if(orders[i].status=='confirmed'){ %>
                         <td><span class="badge rounded-pill alert-success">Confirmed</span></td>
                         <% } else if(orders[i].status=='canceled'){ %>
                             <td><span class="badge rounded-pill alert-danger">Cancelled</span></td>

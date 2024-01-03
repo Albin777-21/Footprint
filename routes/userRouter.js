@@ -150,12 +150,12 @@ router.get('/colorFilter',isBlocked,colorFilter);
 
 //Wallet 
 
-router.post('/addMoneyWallet',isLogged,isBlocked,addMoneyWallet)
-router.post('/updateMongoWallet',isLogged,isBlocked,updateMongoWallet)
-router.post('/useWallet',isLogged,isBlocked,useWallet)
-router.get('/sumWalletBuynow',isLogged,isBlocked,sumWalletBuynow)
-router.post('/walletPayment',isLogged,isBlocked,walletPayment)
-router.post('/sumWallet',isBlocked,sumWallet);
+router.post('/addMoneyWallet',auth.isLogged,isBlocked,addMoneyWallet)
+router.post('/updateMongoWallet',auth.isLogged,isBlocked,updateMongoWallet)
+router.post('/useWallet',auth.isLogged,isBlocked,useWallet)
+router.get('/sumWalletBuynow',auth.isLogged,isBlocked,sumWalletBuynow)
+router.post('/walletPayment',auth.isLogged,isBlocked,walletPayment)
+router.post('/sumWallet',auth.isBlocked,sumWallet);
 
 
 
@@ -163,8 +163,8 @@ router.post('/validateCoupon',isBlocked,validateCoupon);
 
 //INVOICES
 
-router.get('/invoice',isLogged,isBlocked,invoice)
-router.get('/invoices',isLogged,isBlocked,invoices)
+router.get('/invoice',auth.isLogged,isBlocked,invoice)
+router.get('/invoices',auth.isLogged,isBlocked,invoices)
 
 
 

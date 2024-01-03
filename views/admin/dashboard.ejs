@@ -8,9 +8,8 @@
                 <form id="filterForm" action="/admin/dashboard" method="GET">
                     <label for="filter">Filter:</label>
                     <select class="form-select" id="filter" name="filter" >
-                        <option value="all">All</option>
-                        <option value="today">Today</option>
-                        <option value="week">This Week</option>
+                        
+                       
                         <option value="month">This Month</option>
                         <option value="year">This Year</option>
                         <option value="custom">Custom</option>
@@ -43,6 +42,8 @@
                                 Shipping fees are not included
                             </span>
                         </div>
+                        <!-- Displaying custom date range revenue and order count -->
+
                     </article>
                 </div>
             </div>
@@ -96,109 +97,27 @@
                         <article class="card-body">
                             <h5 class="card-title">Recent activities</h5>
                             <ul class="verti-timeline list-unstyled font-sm">
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>
-                                                    <%= latestOrders[0].createdOn.toLocaleDateString() %>
-                                                </span> <i
-                                                    class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
-                                            </h6>
+                                <% latestOrders.forEach(order => { %>
+                                    <li class="event-list">
+                                        <div class="event-timeline-dot">
+                                            <i class="material-icons md-play_circle_outline font-xxl"></i>
                                         </div>
-                                        <div class="media-body">
-                                            <div>
-                                                <%= latestOrders[0].status %>: -
-                                                    <%= latestOrders[0].totalPrice %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="event-list active">
-                                    <div class="event-timeline-dot">
-                                        <i
-                                            class="material-icons md-play_circle_outline font-xxl animation-fade-right"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <% if (latestOrders.length>0) { %>
+                                        <div class="media">
+                                            <div class="me-3">
                                                 <h6><span>
-                                                        <%= latestOrders[1].createdOn.toLocaleDateString() %>
-                                                    </span> <i
-                                                        class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
+                                                    <%= order.createdOn.toLocaleDateString() %>
+                                                </span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
                                                 </h6>
-                                                <% } %>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>
-                                                <%= latestOrders[1].status %>: -
-                                                    <%= latestOrders[1].totalPrice %>
+                                            </div>
+                                            <div class="media-body">
+                                                <div>
+                                                    <%= order.status %>: - <%= order.totalPrice %>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>
-                                                    <%= latestOrders[2].createdOn.toLocaleDateString() %>
-                                                </span> <i
-                                                    class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
-                                            </h6>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>
-                                                <%= latestOrders[2].status %>: -
-                                                    <%= latestOrders[2].totalPrice %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>
-                                                    <%= latestOrders[3].createdOn.toLocaleDateString() %>
-                                                </span> <i
-                                                    class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
-                                            </h6>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>
-                                                <%= latestOrders[3].status %>: -
-                                                    <%= latestOrders[3].totalPrice %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>
-                                                    <%= latestOrders[4].createdOn.toLocaleDateString() %>
-                                                </span> <i
-                                                    class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
-                                            </h6>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>
-                                                <%= latestOrders[4].status %>: -
-                                                    <%= latestOrders[4].totalPrice %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                <% }); %>
+                                
                             </ul>
                         </article>
                     </div>
@@ -237,6 +156,40 @@
             </div>
         </div>
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Retrieve the filter value from query parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const filterValue = urlParams.get('filter');
+    
+                // Set the selected option in the filter dropdown
+                const filterDropdown = document.getElementById('filter');
+                if (filterValue) {
+                    filterDropdown.value = filterValue;
+    
+                    // Toggle the display of custom date input fields if 'custom' is selected
+                    const customDateRange = document.getElementById('customDateRange');
+                    customDateRange.style.display = filterValue === 'custom' ? 'block' : 'none';
+                }
+    
+                // Add change event listener to toggle custom date range display
+                filterDropdown.addEventListener('change', function () {
+                    const selectedValue = this.value;
+                    const customDateRange = document.getElementById('customDateRange');
+    
+                    if (selectedValue === 'custom') {
+                        customDateRange.style.display = 'block';
+                    } else {
+                        customDateRange.style.display = 'none';
+                    }
+                });
+            });
+    
+            function submitForm() {
+                document.getElementById('filterForm').submit();
+            }
+        </script>
+        <script>
+            
 
             function submitForm() {
                 document.getElementById('filterForm').submit();
@@ -258,41 +211,61 @@
             const deliveredOrders = `<%= JSON.stringify(latestOrders.filter(order => order.status === 'delivered')) %>`;
 
 
+            const chartData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    datasets: [
+        {
+            label: 'Monthly Sales',
+            tension: 0.3,
+            fill: true,
+            backgroundColor: 'rgba(44, 120, 220, 0.2)',
+            borderColor: 'rgba(44, 120, 220)',
+            data: <%= JSON.stringify(monthlySalesArray) %>,
+        },
+        // Add datasets for Yearly and Custom Date here
+    ]
+};
 
-            new Chart("myChart1", {
-                type: "line",
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{
-                        label: 'Products',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(44, 120, 220, 0.2)',
-                        borderColor: 'rgba(44, 120, 220)',
-                        data: <%= JSON.stringify(productsPerMonth) %>
-                               },
+// Add data for Yearly Sales (you should replace this with actual data)
+chartData.datasets.push({
+    label: 'Yearly Sales',
+    tension: 0.3,
+    fill: true,
+    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+    borderColor: 'rgba(255, 99, 132)',
+    data:  <%= JSON.stringify(yearlySalesArray) %>,
+});
 
-                    {
-                        label: 'Sales',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(4, 209, 130, 0.2)',
-                        borderColor: 'rgb(4, 209, 130)',
-                        data: <%= JSON.stringify(monthlySalesArray) %> , // Use the array directly
-                    },
-                    ]
+// Add data for Custom Date range (you should replace this with actual data)
+chartData.datasets.push({
+    label: 'Custom Date Sales',
+    tension: 0.3,
+    fill: true,
+    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+    borderColor: 'rgba(75, 192, 192)',
+    data:<%= JSON.stringify(customDateSalesArray) %> ,
+});
+
+new Chart("myChart1", {
+    type: "line",
+    data: chartData,
+    options: {
+        plugins: {
+            legend: {
+                labels: {
+                    usePointStyle: true,
                 },
-                options: {
-                    plugins: {
-                        legend: {
-                            labels: {
-                                usePointStyle: true,
-                            },
-                        }
-                    }
-                }
-            });
-        </script>
+            }
+        }
+    }
+});
+
+</script>
+<script>
+    console.log('startDateFilter:', <%= JSON.stringify(startDateFilter) %>);
+    console.log('endDateFilter:', <%= JSON.stringify(endDateFilter) %>);
+</script>
+
 
 
 
