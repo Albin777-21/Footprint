@@ -79,7 +79,7 @@ router.get('/deleteCoupon',isAdminAuth,deleteCoupon);
 //SALES REPORT
 
 router.get('/loadsalesReport',isAdminAuth,loadsalesReport)
-router.get('/salesReport',isAdminAuth,salesReport)
+router.get('/salesReport',salesReport)
 
 
 //OFFER 
