@@ -48,6 +48,7 @@ const adminDashboard = asyncHandler(async (req, res) => {
             case 'month':
                 startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
                 endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59, 999);
+                console.log(startDate,endDate+"thisssssssssssssssssssss is si")
                 break;
             case 'year':
                 // No need to change startDate and endDate as they are already set
@@ -58,32 +59,38 @@ const adminDashboard = asyncHandler(async (req, res) => {
 
                 if (rawStartDate && rawEndDate) {
                     // Parse the start and end dates
-                    startDateFilter = new Date(rawStartDate);
-                    endDateFilter = new Date(rawEndDate);
+                    startDate = new Date(rawStartDate);
+                    endDate = new Date(rawEndDate);
 
                     // Adjust the end date to the end of the selected day
-                    endDateFilter.setHours(23, 59, 59, 999);
+                    endDate.setHours(23, 59, 59, 999);
 
+                 
                     // Check if the custom date range is valid
-                    if (startDateFilter > endDateFilter) {
+                    if (startDate > endDate) {
                         throw new Error('Invalid custom date range');
                     }
                 } else {
                     // Handle the case when startDate or endDate is not provided
                     // You might want to add error handling or default values here
-                    startDateFilter = startOfYear;
-                    endDateFilter = endOfYear;
+                    startDate = startOfYear;
+                    endDate = endOfYear;
                 }
                 break;
         }
+       
 
-        const orders = await Order.find({
-            status: 'delivered',
-            createdOn: {
-                $gte: startDate,
-                $lt: endDate,
-            },
-        });
+   
+        
+    
+    const orders = await Order.find({
+           
+        createdOn: {
+            $gte: startDate,
+            $lt: endDate,
+        },
+    });
+    
 
         // Set default values for totalRevenue and orderCount
         const totalRevenue = orders.reduce((total, order) => total + order.totalPrice, 0);
@@ -103,11 +110,11 @@ const adminDashboard = asyncHandler(async (req, res) => {
         //THIS IS FOR THE SALES GRAPH
 
         const monthlySales = await Order.aggregate([
-            {
-                $match: {
-                    status: 'delivered',//Filter by status
-                },
-            },
+            // {
+            //     // $match: {
+            //     //     status: 'delivered',//Filter by status
+            //     // },
+            // },
             {
                 $group: {
                     _id: {
@@ -127,7 +134,7 @@ const adminDashboard = asyncHandler(async (req, res) => {
         const yearlySales = await Order.aggregate([
             {
                 $match: {
-                    status: 'delivered',
+                    // status: 'delivered',
                     createdOn: {
                         $gte: startOfYear,
                         $lt: endOfYear,
@@ -154,10 +161,10 @@ const adminDashboard = asyncHandler(async (req, res) => {
        const customDateSales = await Order.aggregate([
         {
             $match: {
-                status: 'delivered',
+                // status: 'delivered',
                 createdOn: {
-                    $gte: startDateFilter,
-                    $lt: endDateFilter,
+                    $gte: startDate,
+                    $lt: endDate,
                 },
             },
         },
@@ -220,7 +227,9 @@ console.log('thsi is customDateSalesArray',customDateSalesArray);
         console.log('this is the productsPerMonth ,',productsPerMonth);
         console.log("latest", latestOrders);
         //THIS IS FOR THEP PRODUCT DATA END
-        res.render('dashboard', { totalRevenue,customDateOrderCount ,customDateTotalRevenue,startDateFilter,endDateFilter, orderCount, productCount, categoryCount, monthlySalesArray, yearlySalesArray, customDateSalesArray, productsPerMonth, latestOrders, deliveredOrders: orders })
+
+       
+        res.render('dashboard', { totalRevenue,customDateOrderCount ,customDateTotalRevenue,startDateFilter,endDateFilter, orderCount, productCount, categoryCount, monthlySalesArray, yearlySalesArray, customDateSalesArray, productsPerMonth, latestOrders, deliveredOrders: orders,  })
 
     } catch (error) {
         console.log('Error happens in the admin Ctrl admindashboard function', error);

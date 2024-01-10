@@ -9,16 +9,14 @@
                 <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="filterOrders" name="date">
                     <option value="all">Report</option>
                     <option value="today">Report of Today</option>
-                    <option value="week">Report of this week</option>
-                    <option value="month">Report of this month</option>
-                    <option value="year">Report of this year</option>
+
                     <option value="custom">Custom</option>
                 </select>
 
                 <!-- Add orderStatus and paymentMethod filters -->
                 <label for="orderStatus" class="ms-3">Order Status:</label>
                 <select name="orderStatus" id="orderStatus" class="ms-2">
-                    <!-- <option value="delivered">All</option> -->
+                    <option value="">All</option>
                     <option value="delivered">Delivered</option>
                     <option value="confirmed">Confirmed</option>
                     <option value="pending">Pending</option>
@@ -31,7 +29,7 @@
 
                 <label for="paymentMethod" class="ms-3">Payment Method:</label>
                 <select name="paymentMethod" id="paymentMethod" class="ms-2">
-                    <!-- <option value="cod">All</option> -->
+                    <option value="">All</option>
                     <option value="online">Razorpay</option>
                     <option value="cod">Cash on Delivery</option>
                     <option value="wallet">Wallet</option>
@@ -142,149 +140,90 @@
                         <% if (totalpages) { %>
                             <div class="pagination justify-content-center">
                               <% if (currentpage > 1) { %>
-                                <button class="btn btn-sm" "><a href="?page=<%= currentpage - 1 %>">Previous</a></button>
+                                <button class="btn btn-sm"><a href="?page=<%= currentpage - 1 %>">Previous</a></button>
                               <% } %>
-                          
-                              <% for (let i = 1; i <= totalpages; i++) { %> <!-- Change the loop to start from 1 and go up to totalpages -->
-                                <button class="btn btn-sm " "><a href="?page=<%= i %>" class="<%= i === currentpage ? 'active' : '' %>"><%= i %></a></button>
+                            
+                              <% for (let i = 1; i <= totalpages; i++) { %>
+                                <button class="btn btn-sm"><a href="?page=<%= i %>" class="<%= i === currentpage ? 'active' : '' %>"><%= i %></a></button>
                               <% } %>
-                          
+                            
                               <% if (currentpage < totalpages) { %>
-                                <button class="btn btn-sm" ><a href="?page=<%= currentpage + 1 %>">Next</a></button>
+                                <button class="btn btn-sm"><a href="?page=<%= currentpage + 1 %>">Next</a></button>
                               <% } %>
                             </div>
                           <% } %>
+                          
                     </div> <!-- card end// -->
                     
                 </div>
                 
                 
-    <!-- <script>
-       document.addEventListener('DOMContentLoaded', function () {
-    // Retrieve the filter value from query parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    let filterValue = urlParams.get('filter');
-
-    // Set the selected option in the filter dropdown
-    const filterDropdown = document.getElementById('filterOrders');
-    const customDateRange = document.getElementById('customDateRange');
-
-    if (filterValue) {
-        filterDropdown.value = filterValue;
-
-        // Toggle the display of custom date input fields if 'custom' is selected
-        customDateRange.style.display = filterValue === 'custom' ? 'block' : 'none';
-    }
-
-    // Add change event listener to toggle custom date range display for filterOrders
-    filterDropdown.addEventListener('change', function () {
-        const filterValue = this.value; // Update the filterValue variable
-
-        if (filterValue === 'custom') {
-            customDateRange.style.display = 'block';
-        } else {
-            customDateRange.style.display = 'none';
-        }
-    });
-
-    // Add click event listeners for downloadExcel and downloadPDF
-    document.getElementById('downloadExcel').addEventListener('click', function () {
-        downloadReport('excel');
-    });
-
-    document.getElementById('downloadPDF').addEventListener('click', function () {
-        downloadReport('pdf');
-    });
-
-    // Function to submit the form (you might want to complete this based on your requirements)
-    function submitForm() {
-        const value = document.getElementById('salesReportForm').value;
-        // Add your logic here for form submission
-    }
-
-    // Function to download the report based on the selected format and filter value
-    function downloadReport(format) {
-        let url = `/admin/salesReport?format=${format}&date=`;
-
-        switch (filterValue) {
-            case 'today':
-                url += 'today';
-                break;
-            case 'week':
-                url += 'week';
-                break;
-            case 'month':
-                url += 'month';
-                break;
-            case 'year':
-                url += 'year';
-                break;
-            default:
-                url += 'all';
-        }
-
-        window.location.href = url;
-    }
-});
-
-
-    </script> -->
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            let filterValue = urlParams.get('date');
-            let orderStatusFilter = urlParams.get('orderStatus'); // Get orderStatus from query parameters
-            let paymentMethodFilter = urlParams.get('paymentMethod'); // Get paymentMethod from query parameters
     
-            // Set the selected option in the filter dropdown
-            const filterDropdown = document.getElementById('filterOrders');
-            const orderStatusDropdown = document.getElementById('orderStatus');
-            const paymentMethodDropdown = document.getElementById('paymentMethod');
-            const customDateRange = document.getElementById('customDateRange');
-    
-            if (filterValue) {
-                filterDropdown.value = filterValue;
-                orderStatusDropdown.value = orderStatusFilter; // Set orderStatus filter value
-                paymentMethodDropdown.value = paymentMethodFilter; // Set paymentMethod filter value
-    
-                // Toggle the display of custom date input fields if 'custom' is selected
-                customDateRange.style.display = filterValue === 'custom' ? 'block' : 'none';
-            }
-    
-            // Add change event listener to toggle custom date range display for filterOrders
-            filterDropdown.addEventListener('change', function () {
-                filterValue = this.value;
-    
-                if (filterValue === 'custom') {
-                    customDateRange.style.display = 'block';
-                } else {
-                    customDateRange.style.display = 'none';
-                }
-            });
-    
-            // Add click event listeners for downloadExcel and downloadPDF
-            document.getElementById('downloadExcel').addEventListener('click', function () {
-                downloadReport('excel');
-            });
-    
-            document.getElementById('downloadPDF').addEventListener('click', function () {
-                downloadReport('pdf');
-            });
-    
-            // Function to submit the form (you might want to complete this based on your requirements)
-            function submitForm() {
-                // Add your logic here for form submission
-            }
-    
-            // Function to download the report based on the selected format and filter values
-            function downloadReport(format) {
-                let url = `/admin/salesReport?format=${format}&date=${filterValue}&orderStatus=${orderStatusDropdown.value}&paymentMethod=${paymentMethodDropdown.value}`;
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        let filterValue = urlParams.get('date');
+                        let orderStatusFilter = urlParams.get('orderStatus');
+                        let paymentMethodFilter = urlParams.get('paymentMethod');
+                        let startDateFilter = urlParams.get('startDate');
+                        let endDateFilter = urlParams.get('endDate');
                 
-                window.location.href = url;
-            }
-        });
-    </script>
+                        const filterDropdown = document.getElementById('filterOrders');
+                        const orderStatusDropdown = document.getElementById('orderStatus');
+                        const paymentMethodDropdown = document.getElementById('paymentMethod');
+                        const customDateRange = document.getElementById('customDateRange');
+                        const startDateInput = document.getElementById('startDate');
+                        const endDateInput = document.getElementById('endDate');
+                
+                        if (filterValue) {
+                            filterDropdown.value = filterValue;
+                            orderStatusDropdown.value = orderStatusFilter;
+                            paymentMethodDropdown.value = paymentMethodFilter;
+                
+                            if (filterValue === 'custom') {
+                                customDateRange.style.display = 'block';
+                                startDateInput.value = startDateFilter;
+                                endDateInput.value = endDateFilter;
+                            } else {
+                                customDateRange.style.display = 'none';
+                            }
+                        }
+                
+                        filterDropdown.addEventListener('change', function () {
+                            filterValue = this.value;
+                
+                            if (filterValue === 'custom') {
+                                customDateRange.style.display = 'block';
+                            } else {
+                                customDateRange.style.display = 'none';
+                            }
+                        });
+                
+                        document.getElementById('downloadExcel').addEventListener('click', function () {
+                            downloadReport('excel');
+                        });
+                
+                        document.getElementById('downloadPDF').addEventListener('click', function () {
+                            downloadReport('pdf');
+                        });
+                
+                        function submitForm() {
+                            // Add your logic here for form submission
+                        }
+                
+                        function downloadReport(format) {
+                            let url = `/admin/salesReport?format=${format}&date=${filterValue}&orderStatus=${orderStatusDropdown.value}&paymentMethod=${paymentMethodDropdown.value}`;
+                
+                            if (filterValue === 'custom') {
+                                url += `&startDate=${startDateInput.value}&endDate=${endDateInput.value}`;
+                            }
+                
+                            window.location.href = url;
+                        }
+                    });
+                </script>
+                
     
               
           

@@ -57,7 +57,7 @@
                                 <%=orderCount%>
                             </span>
                             <span class="text-sm">
-                                Excluding orders in transit
+                                Including orders in transit
                             </span>
                         </div>
                     </article>
@@ -128,26 +128,27 @@
                             <h5 class="card-title">Delivered Orders</h5>
                             <ul class="verti-timeline list-unstyled font-sm">
                                 <% for (const order of deliveredOrders) { %>
-                                    <li class="event-list">
-                                        <div class="event-timeline-dot">
-                                            <i class="material-icons md-done font-xxl"></i>
-                                        </div>
-                                        <div class="media">
-                                            <div class="me-3">
-                                                <h6><span>
-                                                        <%= order.createdOn.toLocaleDateString() %>
-                                                    </span> <i
-                                                        class="material-icons md-trending_flat text-success ml-15 d-inline-block"></i>
-                                                </h6>
+                                    <% if (order.status === 'delivered') { %>
+                                        <li class="event-list">
+                                            <div class="event-timeline-dot">
+                                                <i class="material-icons md-done font-xxl"></i>
                                             </div>
-                                            <div class="media-body">
-                                                <div>
-                                                    <%= order.status %>: <%= order.totalPrice %>
+                                            <div class="media">
+                                                <div class="me-3">
+                                                    <h6><span>
+                                                            <%= order.createdOn.toLocaleDateString() %>
+                                                        </span> <i class="material-icons md-trending_flat text-success ml-15 d-inline-block"></i>
+                                                    </h6>
+                                                </div>
+                                                <div class="media-body">
+                                                    <div>
+                                                        <%= order.status %>: <%= order.totalPrice %>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
+                                        </li>
                                     <% } %>
+                                <% } %>
                             </ul>
                         </article>
                     </div>
@@ -157,25 +158,33 @@
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Retrieve the filter value from query parameters
+                // Retrieve the filter value and custom dates from query parameters
                 const urlParams = new URLSearchParams(window.location.search);
                 const filterValue = urlParams.get('filter');
-    
+                const startDateValue = urlParams.get('startDate');
+                const endDateValue = urlParams.get('endDate');
+        
                 // Set the selected option in the filter dropdown
                 const filterDropdown = document.getElementById('filter');
                 if (filterValue) {
                     filterDropdown.value = filterValue;
-    
+        
                     // Toggle the display of custom date input fields if 'custom' is selected
                     const customDateRange = document.getElementById('customDateRange');
                     customDateRange.style.display = filterValue === 'custom' ? 'block' : 'none';
+        
+                    // Set the custom dates if available
+                    if (startDateValue && endDateValue) {
+                        document.getElementById('startDate').value = startDateValue;
+                        document.getElementById('endDate').value = endDateValue;
+                    }
                 }
-    
+        
                 // Add change event listener to toggle custom date range display
                 filterDropdown.addEventListener('change', function () {
                     const selectedValue = this.value;
                     const customDateRange = document.getElementById('customDateRange');
-    
+        
                     if (selectedValue === 'custom') {
                         customDateRange.style.display = 'block';
                     } else {
@@ -183,82 +192,91 @@
                     }
                 });
             });
-    
+        
             function submitForm() {
+                // Store the selected dates before submitting the form
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+        
+                // Submit the form
                 document.getElementById('filterForm').submit();
+        
+                // Set the selected dates back after form submission
+                document.getElementById('startDate').value = startDate;
+                document.getElementById('endDate').value = endDate;
             }
         </script>
+        
         <script>
             
 
-            function submitForm() {
-                document.getElementById('filterForm').submit();
-            }
+            // function submitForm() {
+            //     document.getElementById('filterForm').submit();
+            // }
 
-            // Add JavaScript to toggle the display of custom date input fields
-            document.getElementById('filter').addEventListener('change', function () {
-                const selectedValue = this.value;
-                const customDateRange = document.getElementById('customDateRange');
+            // // Add JavaScript to toggle the display of custom date input fields
+            // document.getElementById('filter').addEventListener('change', function () {
+            //     const selectedValue = this.value;
+            //     const customDateRange = document.getElementById('customDateRange');
 
-                if (selectedValue === 'custom') {
-                    customDateRange.style.display = 'block';
-                } else {
-                    customDateRange.style.display = 'none';
-                }
-            });
-
-
+            //     if (selectedValue === 'custom') {
+            //         customDateRange.style.display = 'block';
+            //     } else {
+            //         customDateRange.style.display = 'none';
+            //     }
+            // });
             const deliveredOrders = `<%= JSON.stringify(latestOrders.filter(order => order.status === 'delivered')) %>`;
+          
 
 
             const chartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [
-        {
-            label: 'Monthly Sales',
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: 'Monthly Sales',
+                    tension: 0.3,
+                    fill: true,
+                    backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                    borderColor: 'rgba(44, 120, 220)',
+                    data: <%= JSON.stringify(monthlySalesArray) %>,
+                },
+                // Add datasets for Yearly and Custom Date here
+            ]
+        };
+
+        // Add data for Yearly Sales (you should replace this with actual data)
+        chartData.datasets.push({
+            label: 'Yearly Sales',
             tension: 0.3,
             fill: true,
-            backgroundColor: 'rgba(44, 120, 220, 0.2)',
-            borderColor: 'rgba(44, 120, 220)',
-            data: <%= JSON.stringify(monthlySalesArray) %>,
-        },
-        // Add datasets for Yearly and Custom Date here
-    ]
-};
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132)',
+            data: <%= JSON.stringify(yearlySalesArray) %>,
+        });
 
-// Add data for Yearly Sales (you should replace this with actual data)
-chartData.datasets.push({
-    label: 'Yearly Sales',
-    tension: 0.3,
-    fill: true,
-    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-    borderColor: 'rgba(255, 99, 132)',
-    data:  <%= JSON.stringify(yearlySalesArray) %>,
-});
+        // Add data for Custom Date range (you should replace this with actual data)
+        chartData.datasets.push({
+            label: 'Custom Date Sales',
+            tension: 0.3,
+            fill: true,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192)',
+            data: <%= JSON.stringify(customDateSalesArray) %>,
+        });
 
-// Add data for Custom Date range (you should replace this with actual data)
-chartData.datasets.push({
-    label: 'Custom Date Sales',
-    tension: 0.3,
-    fill: true,
-    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-    borderColor: 'rgba(75, 192, 192)',
-    data:<%= JSON.stringify(customDateSalesArray) %> ,
-});
-
-new Chart("myChart1", {
-    type: "line",
-    data: chartData,
-    options: {
-        plugins: {
-            legend: {
-                labels: {
-                    usePointStyle: true,
-                },
+        new Chart("myChart1", {
+            type: "line",
+            data: chartData,
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true,
+                        },
+                    }
+                }
             }
-        }
-    }
-});
+        });
 
 </script>
 <script>

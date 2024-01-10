@@ -688,12 +688,11 @@
             function getFirstDayOfYear(date) {
                 return new Date(date.getFullYear(), 0, 1)
             }
-
+if( date != "all"){
             switch (date) {
                 case "today":
                     orders = await Order.find({
-                        status: orderStatus || "delivered",
-                        payment: paymentMethod || undefined,// Use undefined if the parameter is not provided
+                      
                         createdOn: {
                             $gte: new Date().setHours(0, 0, 0, 0),//start of today
                             $lt: new Date().setHours(23, 59, 59, 999)//end of the day
@@ -712,9 +711,8 @@
                 
 
                     orders = await Order.find({
-                        status: orderStatus || 'delivered',
-                        payment: paymentMethod || undefined,
-
+                        payment:paymentMethod,
+                        status:orderStatus,
                         createdOn: {
                             $gte: startOfWeek,
                             $lt: endOfWeek,
@@ -726,8 +724,8 @@
                     const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59, 999)
 
                     orders = await Order.find({
-                        status: orderStatus || 'delivered',
-                        payment: paymentMethod || undefined,
+                        payment:paymentMethod,
+                        status:orderStatus,
                         createdOn: {
                             $gte: startOfMonth,
                             $lt: endOfMonth,
@@ -739,8 +737,8 @@
                     const endOfYear = new Date(currentDate.getFullYear(), 11, 31, 23, 59, 59, 999);
 
                     orders = await Order.find({
-                        status: orderStatus || 'delivered',
-                        payment: paymentMethod || undefined,
+                        status:orderStatus,
+                        payment:paymentMethod,
                         createdOn: {
                             $gte: startOfYear,
                             $lt: endOfYear,
@@ -752,8 +750,7 @@
                     const startDate = new Date(req.query.startDate);
                     const endDate = new Date(req.query.endDate);
                     orders = await Order.find({
-                        status: orderStatus || "delivered",
-                        payment: paymentMethod || undefined,
+                      
                         createdOn: {
                             $gte: startDate,
                             $lt: endDate,
@@ -762,13 +759,21 @@
                     break;
                 default:
                     //Fetch all orders
-                    orders = await Order.find({
-                        status: orderStatus || "delivered",
-                        payment: paymentMethod || undefined,
-                    })
+                    orders = await Order.find()
                     break;
 
-            }
+            
+        }
+    }else{
+        if(paymentMethod && orderStatus){
+            orders = await Order.find({
+                payment:paymentMethod,
+                status:orderStatus
+            })
+        }else{
+        orders = await Order.find()
+        }
+    }
             if (format === 'excel') {
                 const workbook = new ExcelJS.Workbook()
                 const worksheet = workbook.addWorksheet('Sales Report')
