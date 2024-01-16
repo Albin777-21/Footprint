@@ -20,7 +20,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
-
+    <style>
+        .menu-item.active {
+            background-color: #1fcabc; 
+        }
+    </style>
+    
 
 
 
@@ -44,18 +49,23 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
-                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
-                    </a>
-                </li>
+        
+<li id="dashboard" class="menu-item">
+    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+        <span class="text">Dashboard</span>
+    </a>
+</li>
+
+<!-- Repeat this for other menu items -->
+
+
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
                         <a href="/admin/product">All product </a>
-                        <a href="/admin/addProduct">Add product </a>
+                       
                     </div>
                     
                 </li>
@@ -170,4 +180,30 @@
                     </li>
                 </ul>
             </div>
+            <script>
+                $(document).ready(function () {
+                    // Get the current page URL
+                    var currentUrl = window.location.pathname;
+            
+                    // Remove trailing slashes
+                    currentUrl = currentUrl.replace(/\/$/, "");
+            
+                    // Find the corresponding menu item and add the "active" class
+                    $('.menu-item').each(function () {
+                        var menuItemUrl = $(this).find('a').attr('href');
+                        if (menuItemUrl === currentUrl) {
+                            $(this).addClass('active');
+                        }
+                    });
+                });
+            </script>
+            
+         
         </header>
+       
+  
+
+
+
+
+

@@ -4,8 +4,9 @@ const Product = require('../model/productModel')
 const categoryModel = require('../model/categoryModel')
 const asyncHandler = require('express-async-handler')
 const Order = require('../model/orderModel')
+const Banner=require('../model/bannerModel')
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 
 
@@ -26,9 +27,10 @@ const loadIndex = asyncHandler(async (req, res) => {
         const userId = req.session.user;
         const product = await Product.find({ isDeleted: false, status: true })
         const user = await User.findById(userId)
+        const banner=await Banner.find()
 
         const category = await categoryModel.find()
-        res.render('index', { user, product, category: category })
+        res.render('index', { user, product, category: category ,banner})
     } catch (error) {
         console.log("error happens in userController loadIndex function ", error);
        
@@ -732,6 +734,28 @@ const changePassword = asyncHandler(async (req, res) => {
     }
 });
 
+const aboutpage= asyncHandler(async(req,res)=>{
+    try {
+        const userId=req.session.user
+        const user=await User.findById(userId)
+        res.render('about',{user})
+        
+    } catch (error) {
+        console.log('Error Happence in th about Ctrl in;; the funtion aboutpage',error);
+    }
+})
+
+const contactpage= asyncHandler(async(req,res)=>{
+    try {
+        const userId=req.session.user
+        const user=await User.findById(userId)
+        res.render('contact',{user})
+        
+    } catch (error) {
+        console.log('Error Happence in the contactCtrl in;; the funtion contact page',error);
+    }
+})
+
 
 
 
@@ -769,6 +793,8 @@ module.exports = {
     processNewAddress,
     checkoutAddress,
     changePassword,
+    aboutpage,
+    contactpage
 
 
 

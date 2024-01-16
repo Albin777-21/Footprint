@@ -6,6 +6,7 @@ const {allProducts,addProduct,createProduct,editProduct,productEdited,unlistProd
 const {adminOrderDetails,changeStatusCanceled,changeStatusConfirmed,changeStatusDelivered,changeStatusReturned,changeStatusShipped,changeStausPending,adminOrderList,allOrderDetails, loadsalesReport, salesReport}=require('../controllers/orderCtrl')
 const {loadCoupon,addCoupon,coupon,editCoupon,deleteCoupon,updateCoupon}=require('../controllers/couponCtrl')
 const{productOfferpage,updateOffer,categoryOffer,updateCategoryOffer}=require('../controllers/offerCtrl')
+const{banner,addNewBanner,createBanner,editBanner,updateBanner,deleteBanner}=require('../controllers/bannerCtrl')
 router.set('view engine','ejs'); 
 router.set('views','./views/admin');
 const {upload}=require('../multer/multer');
@@ -88,6 +89,16 @@ router.get('/productOfferpage',isAdminAuth,productOfferpage)
 router.post('/updateOffer',isAdminAuth,updateOffer)
 router.get('/categoryOffer',isAdminAuth,categoryOffer)
 router.post('/updateCategoryOffer',isAdminAuth,updateCategoryOffer)
+
+//BANNER ROUTE
+
+router.get('/banner',isAdminAuth,banner);isAdminAuth,
+router.get('/addNewBanner',isAdminAuth,addNewBanner);
+router.post('/createBanner',isAdminAuth,upload.single('image'),createBanner);
+router.get('/editBanner',isAdminAuth,editBanner);
+router.post('/updateBanner',isAdminAuth,upload.single('image'),updateBanner);
+router.get('/deleteBanner',isAdminAuth,deleteBanner);
+
 
 
 module.exports=router;

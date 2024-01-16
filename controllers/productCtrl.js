@@ -11,25 +11,29 @@ const categoryModel = require('../model/categoryModel');
 
 //get all products
 
-const allProducts=asyncHandler(async(req,res)=>{
-    
+const allProducts = asyncHandler(async (req, res) => {
     try {
-        const limit=8; // Number of products per page
-        const page=req.query.page ? parseInt(req.query.page) : 1;  // Current page number
-        const product = await Product.find()
-            .skip((page - 1) * limit)  // Skip the results from previous pages
-            .limit(limit);  // Limit the number of results to "limit"
-
-        const totalProduct = await Product.countDocuments();
-        const totalPages = Math.ceil(totalProduct / limit);
-
-        res.render('product',{product,page,totalPages,limit});
+      const limit = 8; // Number of products per page
+      const page = req.query.page ? parseInt(req.query.page) : 1; // Current page number
+  
+      // Using the aggregation pipeline to efficiently paginate and count documents
+      const [product, totalProduct] = await Promise.all([
+        Product.find()
+          .skip((page - 1) * limit)
+          .limit(limit),
+        Product.countDocuments(),
+      ]);
+  
+      const totalPages = Math.ceil(totalProduct / limit);
+  
+      res.render('product', { product, page, totalPages, limit });
     } catch (error) {
-
-        console.log("all products view error",error);
-        
+      console.error("Error in all products view", error);
+      // Handle the error appropriately, for example, send an error response to the client
+      res.status(500).send("Internal Server Error");
     }
-});
+  });
+  
 
 
 //add Product page rendering

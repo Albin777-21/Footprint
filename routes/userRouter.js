@@ -29,7 +29,9 @@ const { loginUser,
     processNewAddress,
     checkoutAddress,
     changePassword,
-    Changepass
+    Changepass,
+    aboutpage,
+    contactpage
     
 
 
@@ -121,9 +123,7 @@ router.get('/aProduct',auth.isBlocked, upload.single('images'), aProductPage)
  router.get('/orderPage',auth.isLogged,isBlocked,orderPage)
  router.get('/allOrderDetails',auth.isLogged,isBlocked,allOrderDetails)
  router.get('/cancelOrder',auth.isLogged,isBlocked,cancelOrder)
- router.get('/cancelOrder',auth.isLogged,isBlocked,cancelOrder)
- router.get('/cancelOrder',auth.isLogged,isBlocked,cancelOrder)
- router.get('/cancelOrder',auth.isLogged,isBlocked,cancelOrder)
+ 
  router.get('/return',auth.isLogged,isBlocked,returnOrder)
  router.post('/verifyPayment',auth.isLogged,isBlocked,verifyPayment)
  router.get('/buyNow',auth.isLogged,isBlocked,checkOut)
@@ -165,6 +165,9 @@ router.post('/validateCoupon',isBlocked,validateCoupon);
 
 router.get('/invoice',auth.isLogged,isBlocked,invoice)
 router.get('/invoices',auth.isLogged,isBlocked,invoices)
+
+router.get('/about',aboutpage)
+router.get('/contact',contactpage)
 
 
 

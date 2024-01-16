@@ -12,6 +12,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
         res.render('login')
     } catch (error) {
         console.log("login admin error", error);
+        res.status(404).render("adminError");
 
     }
 })
@@ -234,7 +235,7 @@ console.log('thsi is customDateSalesArray',customDateSalesArray);
     } catch (error) {
         console.log('Error happens in the admin Ctrl admindashboard function', error);
 
-        res.status(500).send('Internal server error')
+        res.status(404).render("adminError");
 
     }
 })
@@ -253,10 +254,11 @@ const adminVerifyLogin = asyncHandler(async (req, res) => {
             res.redirect('/admin/dashboard')
         }
         else {
-            res.redirect('/admin/login')
+            res.status(404).render("adminError");
         }
     } catch (error) {
         console.log("this is adminVerify error", error)
+        res.status(404).render("adminError");
     }
 });
 
@@ -285,6 +287,7 @@ const userField = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log("user field error in dashboard", error);
+        res.status(404).render("adminError");
 
 
     }
@@ -303,6 +306,7 @@ const blockUser = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log("block user error");
+        res.status(404).render("adminError");
     }
 })
 
@@ -317,6 +321,7 @@ const unblockUser = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log("unblock user error", error);
+        res.status(404).render("adminError");
     }
 })
 

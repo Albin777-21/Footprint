@@ -1,236 +1,258 @@
 <%- include('header') %>
 
-<section class="content-main">
-    <div class="content-header">
-        <div>
-            <h2 class="content-title card-title">Order List </h2>
-            <br><br>
-            <form id="salesReportForm" action="/admin/salesReport" method="get">
-                <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="filterOrders" name="date">
-                    <option value="all">Report</option>
-                    <option value="today">Report of Today</option>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Order List </h2>
+                <br><br>
+                <form id="salesReportForm" action="/admin/salesReport" method="get">
+                    <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="filterOrders" name="date">
+                        <option value="all">Report</option>
+                        <option value="today">Report of Today</option>
 
-                    <option value="custom">Custom</option>
-                </select>
+                        <option value="custom">Custom</option>
+                    </select>
 
-                <!-- Add orderStatus and paymentMethod filters -->
-                <label for="orderStatus" class="ms-3">Order Status:</label>
-                <select name="orderStatus" id="orderStatus" class="ms-2">
-                    <option value="">All</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="pending">Pending</option>
-                    <option value="canceled">Cancelled</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="returned">Returned</option>
+                    <!-- Add orderStatus and paymentMethod filters -->
+                    <label for="orderStatus" class="ms-3">Order Status:</label>
+                    <select name="orderStatus" id="orderStatus" class="ms-2">
+                        <option value="">All</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="pending">Pending</option>
+                        <option value="canceled">Cancelled</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="returned">Returned</option>
 
-                    <!-- Add other order statuses as needed -->
-                </select>
+                        <!-- Add other order statuses as needed -->
+                    </select>
 
-                <label for="paymentMethod" class="ms-3">Payment Method:</label>
-                <select name="paymentMethod" id="paymentMethod" class="ms-2">
-                    <option value="">All</option>
-                    <option value="online">Razorpay</option>
-                    <option value="cod">Cash on Delivery</option>
-                    <option value="wallet">Wallet</option>
-                    <!-- Add other payment methods as needed -->
-                </select>
+                    <label for="paymentMethod" class="ms-3">Payment Method:</label>
+                    <select name="paymentMethod" id="paymentMethod" class="ms-2">
+                        <option value="">All</option>
+                        <option value="online">Razorpay</option>
+                        <option value="cod">Cash on Delivery</option>
+                        <option value="wallet">Wallet</option>
+                        <!-- Add other payment methods as needed -->
+                    </select>
 
-                <div id="customDateRange" style="display: none;" class="ms-3">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" name="startDate" id="startDate">
+                    <div id="customDateRange" style="display: none;" class="ms-3">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" name="startDate" id="startDate">
 
-                    <label for="endDate">End Date:</label>
-                    <input type="date" name="endDate" id="endDate">
-                </div>
+                        <label for="endDate">End Date:</label>
+                        <input type="date" name="endDate" id="endDate">
+                    </div>
 
-                <button type="submit" class="btn btn-primary ms-3" onclick="submitForm()">Filter</button>
-            </form>
-        </div>
-
-        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-            <a class="btn btn-primary" href="#" id="downloadExcel">Download Excel</a>
-            <a class="btn btn-primary" href="#" id="downloadPDF">Download PDF</a>
-        </div>
-    </div>
-
-               
+                    <button type="submit" class="btn btn-primary ms-3" onclick="submitForm()">Filter</button>
+                </form>
             </div>
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="card mb-4">
-                      
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <!-- <th>ID</th> -->
-                                            <th>Product name</th>
-                                            <th>Price</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
-                                            <th class="text-end"> Action </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+
+            <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                <a class="btn btn-primary" href="#" id="downloadExcel">Download Excel</a>
+                <a class="btn btn-primary" href="#" id="downloadPDF">Download PDF</a>
+            </div>
+        </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card mb-4">
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <!-- <th>ID</th> -->
+                                        <th>Product name</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th class="text-end"> Action </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
 
 
 
 
-     <!------------------------------------------ this is a single order data -=--------------------->
-     <% if (orders.length> 0) { %>
-        <% for (let i=0; i < orders.length;i++) { %>
-            <% for (let j = 0; j < orders[i].product.length; j++) { %>
-            <tr>
-                <!-- <td><%= i+1%></td> -->
-                <td><b><%= orders[i].product[j].title  %></b></td>
-               
-                <td>₹<%= orders[i].totalPrice %></td>
+                                    <!------------------------------------------ this is a single order data -=--------------------->
+                                    <% if (orders.length> 0) { %>
+                                        <% for (let i=0; i < orders.length;i++) { %>
+                                            <% for (let j=0; j < orders[i].product.length; j++) { %>
+                                                <tr>
+                                                    <!-- <td><%= i+1%></td> -->
+                                                    <td><b>
+                                                            <%= orders[i].product[j].title %>
+                                                        </b></td>
 
-                <% if (orders[i].status=='pending') { %>
+                                                    <td>₹<%= orders[i].totalPrice %>
+                                                    </td>
 
-                    <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                    <% } else if(orders[i].status=='confirmed'){ %>
-                        <td><span class="badge rounded-pill alert-success">Confirmed</span></td>
-                        <% } else if(orders[i].status=='canceled'){ %>
-                            <td><span class="badge rounded-pill alert-danger">Cancelled</span></td>
-                    <% } else if(orders[i].status=='shipped'){ %>
-                        <td><span class="badge rounded-pill alert-success">shipped</span></td>
-                        <% } else if(orders[i].status=='delivered'){ %>
-                            <td><span class="badge rounded-pill alert-success">delivered</span></td>
-                            <% } else if(orders[i].status=='returned'){ %>
-                                <td><span class="badge rounded-pill alert-danger">returned</span></td>
-                                
-                            <% } %>
+                                                    <% if (orders[i].status=='pending' ) { %>
 
-                        <td><%= orders[i].createdOn.toLocaleDateString() %></td>
-                <td class="text-end">
-                    <a href="/admin/adminOrderDetails?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                                        <td><span
+                                                                class="badge rounded-pill alert-warning">Pending</span>
+                                                        </td>
+                                                        <% } else if(orders[i].status=='confirmed' ){ %>
+                                                            <td><span
+                                                                    class="badge rounded-pill alert-success">Confirmed</span>
+                                                            </td>
+                                                            <% } else if(orders[i].status=='canceled' ){ %>
+                                                                <td><span
+                                                                        class="badge rounded-pill alert-danger">Cancelled</span>
+                                                                </td>
+                                                                <% } else if(orders[i].status=='shipped' ){ %>
+                                                                    <td><span
+                                                                            class="badge rounded-pill alert-success">shipped</span>
+                                                                    </td>
+                                                                    <% } else if(orders[i].status=='delivered' ){ %>
+                                                                        <td><span
+                                                                                class="badge rounded-pill alert-success">delivered</span>
+                                                                        </td>
+                                                                        <% } else if(orders[i].status=='returned' ){ %>
+                                                                            <td><span
+                                                                                    class="badge rounded-pill alert-danger">returned</span>
+                                                                            </td>
+
+                                                                            <% } %>
+
+                                                                                <td>
+                                                                                    <%= orders[i].createdOn.toLocaleDateString()
+                                                                                        %>
+                                                                                </td>
+                                                                                <td class="text-end">
+                                                                                    <a href="/admin/adminOrderDetails?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"
+                                                                                        class="btn btn-md rounded font-sm">Detail</a>
 
 
-                   
-                   
-                    
-                
-                </td>
-            </tr>
 
-            <% } %> 
-            <% } %>
-            <% } else { %>
-                <tr>
-                  <td colspan="2">No item found in Oders</td>
-                </tr>
-                <% } %>
-       
-       
-        
-       
-      
-              <!-- --------------------------end ------------------------------------ -->
-                                        
-                                        
-                                      
-                                    </tbody>
-                                </table>
-                            </div> <!-- table-responsive //end -->
-                        </div> <!-- card-body end// -->
-                        <% if (totalpages) { %>
-                            <div class="pagination justify-content-center">
-                              <% if (currentpage > 1) { %>
+
+
+
+                                                                                </td>
+                                                </tr>
+
+                                                <% } %>
+                                                    <% } %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="2">No item found in Oders</td>
+                                                            </tr>
+                                                            <% } %>
+
+
+
+
+
+                                                                <!-- --------------------------end ------------------------------------ -->
+
+
+
+                                </tbody>
+                            </table>
+                        </div> <!-- table-responsive //end -->
+                    </div> <!-- card-body end// -->
+                    <% if (totalpages) { %>
+                        <div class="pagination justify-content-center">
+                            <% if (currentpage> 1) { %>
                                 <button class="btn btn-sm"><a href="?page=<%= currentpage - 1 %>">Previous</a></button>
-                              <% } %>
-                            
-                              <% for (let i = 1; i <= totalpages; i++) { %>
-                                <button class="btn btn-sm"><a href="?page=<%= i %>" class="<%= i === currentpage ? 'active' : '' %>"><%= i %></a></button>
-                              <% } %>
-                            
-                              <% if (currentpage < totalpages) { %>
-                                <button class="btn btn-sm"><a href="?page=<%= currentpage + 1 %>">Next</a></button>
-                              <% } %>
-                            </div>
-                          <% } %>
-                          
-                    </div> <!-- card end// -->
-                    
-                </div>
-                
-                
-    
+                                <% } %>
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const urlParams = new URLSearchParams(window.location.search);
-                        let filterValue = urlParams.get('date');
-                        let orderStatusFilter = urlParams.get('orderStatus');
-                        let paymentMethodFilter = urlParams.get('paymentMethod');
-                        let startDateFilter = urlParams.get('startDate');
-                        let endDateFilter = urlParams.get('endDate');
-                
-                        const filterDropdown = document.getElementById('filterOrders');
-                        const orderStatusDropdown = document.getElementById('orderStatus');
-                        const paymentMethodDropdown = document.getElementById('paymentMethod');
-                        const customDateRange = document.getElementById('customDateRange');
-                        const startDateInput = document.getElementById('startDate');
-                        const endDateInput = document.getElementById('endDate');
-                
-                        if (filterValue) {
-                            filterDropdown.value = filterValue;
-                            orderStatusDropdown.value = orderStatusFilter;
-                            paymentMethodDropdown.value = paymentMethodFilter;
-                
-                            if (filterValue === 'custom') {
-                                customDateRange.style.display = 'block';
-                                startDateInput.value = startDateFilter;
-                                endDateInput.value = endDateFilter;
-                            } else {
-                                customDateRange.style.display = 'none';
-                            }
+                                    <% for (let i=1; i <=totalpages; i++) { %>
+                                        <button class="btn btn-sm"><a href="?page=<%= i %>"
+                                                class="<%= i === currentpage ? 'active' : '' %>">
+                                                <%= i %>
+                                            </a></button>
+                                        <% } %>
+
+                                            <% if (currentpage < totalpages) { %>
+                                                <button class="btn btn-sm"><a
+                                                        href="?page=<%= currentpage + 1 %>">Next</a></button>
+                                                <% } %>
+                        </div>
+                        <% } %>
+
+                </div> <!-- card end// -->
+
+            </div>
+
+
+
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    let filterValue = urlParams.get('date');
+                    let orderStatusFilter = urlParams.get('orderStatus');
+                    let paymentMethodFilter = urlParams.get('paymentMethod');
+                    let startDateFilter = urlParams.get('startDate');
+                    let endDateFilter = urlParams.get('endDate');
+
+                    const filterDropdown = document.getElementById('filterOrders');
+                    const orderStatusDropdown = document.getElementById('orderStatus');
+                    const paymentMethodDropdown = document.getElementById('paymentMethod');
+                    const customDateRange = document.getElementById('customDateRange');
+                    const startDateInput = document.getElementById('startDate');
+                    const endDateInput = document.getElementById('endDate');
+
+                    if (filterValue) {
+                        filterDropdown.value = filterValue;
+                        orderStatusDropdown.value = orderStatusFilter;
+                        paymentMethodDropdown.value = paymentMethodFilter;
+
+                        if (filterValue === 'custom') {
+                            customDateRange.style.display = 'block';
+                            startDateInput.value = startDateFilter;
+                            endDateInput.value = endDateFilter;
+                        } else {
+                            customDateRange.style.display = 'none';
                         }
-                
-                        filterDropdown.addEventListener('change', function () {
-                            filterValue = this.value;
-                
-                            if (filterValue === 'custom') {
-                                customDateRange.style.display = 'block';
-                            } else {
-                                customDateRange.style.display = 'none';
-                            }
-                        });
-                
-                        document.getElementById('downloadExcel').addEventListener('click', function () {
-                            downloadReport('excel');
-                        });
-                
-                        document.getElementById('downloadPDF').addEventListener('click', function () {
-                            downloadReport('pdf');
-                        });
-                
-                        function submitForm() {
-                            // Add your logic here for form submission
-                        }
-                
-                        function downloadReport(format) {
-                            let url = `/admin/salesReport?format=${format}&date=${filterValue}&orderStatus=${orderStatusDropdown.value}&paymentMethod=${paymentMethodDropdown.value}`;
-                
-                            if (filterValue === 'custom') {
-                                url += `&startDate=${startDateInput.value}&endDate=${endDateInput.value}`;
-                            }
-                
-                            window.location.href = url;
+                    }
+
+                    filterDropdown.addEventListener('change', function () {
+                        filterValue = this.value;
+
+                        if (filterValue === 'custom') {
+                            customDateRange.style.display = 'block';
+                        } else {
+                            customDateRange.style.display = 'none';
                         }
                     });
-                </script>
-                
-    
-              
-          
-        
-           
-        </section> <!-- content-main end// -->
-        
-        
-        <%- include('footer') %>
-        
+
+                    document.getElementById('downloadExcel').addEventListener('click', function () {
+                        downloadReport('excel');
+                    });
+
+                    document.getElementById('downloadPDF').addEventListener('click', function () {
+                        downloadReport('pdf');
+                    });
+
+                    function submitForm() {
+                        // Add your logic here for form submission
+                    }
+
+                    function downloadReport(format) {
+                        let url = `/admin/salesReport?format=${format}&date=${filterValue}&orderStatus=${orderStatusDropdown.value}&paymentMethod=${paymentMethodDropdown.value}`;
+
+                        if (filterValue === 'custom') {
+                            url += `&startDate=${startDateInput.value}&endDate=${endDateInput.value}`;
+                        }
+
+                        window.location.href = url;
+                    }
+                });
+            </script>
+
+
+
+
+
+
+    </section> <!-- content-main end// -->
+
+
+    <%- include('footer') %>

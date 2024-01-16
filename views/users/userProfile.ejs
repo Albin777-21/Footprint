@@ -1,4 +1,17 @@
 <%- include('header') %>
+    <!-- Add these links in the head section of your HTML file -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyJiFkTfBUn5pQ5tr9Q+8k4zo9+Tl8ZlG" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-jYZR/Jz9fHH6R5JZ6LQeVMaISu4ZWbXPBweM3R+w6So/1eh9OqTCk6j9ef1FvTVZ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyJiFkTfBUn5pQ5tr9Q+8k4zo9+Tl8ZlG"
+        crossorigin="anonymous"></script>
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <main class="main">
         <div class="page-header breadcrumb-wrap">
@@ -330,7 +343,7 @@
                                                             <tr>
                                                                 <!-- <th>#ID</th> -->
                                                                 <th scope="col">Name</th>
-                                                               
+
                                                                 <th scope="col">Total</th>
                                                                 <th scope="col">Status</th>
                                                                 <th scope="col">Date</th>
@@ -339,71 +352,135 @@
                                                         </thead>
                                                         <tbody>
                                                             <% if (orders.length> 0) { %>
-                                                            <% for (let i=0; i < orders.length;i++) { %>
-                                                                <% for (let j = 0; j < orders[i].product.length; j++) { %>
-                                                                <tr>
-                                                                    <!-- <td><%= orders[i]._id %></td> -->
-                                                                    <td><b><%= orders[i].product[j].title  %></b></td>
-                                                                   
-                                                                    <td>₹<%= orders[i].totalPrice %></td>
-                        
-                                                                    <% if (orders[i].status=='pending') { %>
-                        
-                                                                        <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                                                                        <% } else if(orders[i].status=='confirmed'){ %>
-                                                                            <td><span class="badge rounded-pill alert-success">confirmed</span></td>
-                                                                            <% } else if(orders[i].status=='canceled'){ %>
-                                                                                <td><span class="badge rounded-pill alert-danger">Cancelled</span></td>
-                                                                        <% } else if(orders[i].status=='shipped'){ %>
-                                                                            <td><span class="badge rounded-pill alert-success">shipped</span></td>
-                                                                            <% } else if(orders[i].status=='delivered'){ %>
-                                                                                <td><span class="badge rounded-pill alert-success">delivered</span></td>
-                                                                                <% } else if(orders[i].status=='returned'){ %>
-                                                                                    <td><span class="badge rounded-pill alert-danger">returned</span></td>
-                                                        
-                                                                                <% } %>
-                                                        
-                        
-                                                                            <td><%= orders[i].createdOn.toLocaleDateString() %></td>
-                                                                    <td class="text-end">
-                                                                        <a href="/orderDetails?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>" class="btn btn-md rounded font-sm">Detail</a>
-                                                                        <% if (orders[i].status=='pending') { %>
-                                                                        <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="btn btn-md rounded font-sm">Cancel</a>
-                                                                        <% } else if(orders[i].status=='confirmed'){ %>
-                                                                            <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="btn btn-md rounded font-sm">Cancel</a>
-                                                                           
-                        
-                                                                            <% } else if(orders[i].status=='canceled'){ %>
-                                                                                <% } else if(orders[i].status=='shipped'){ %>
-                                                                                    <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="btn btn-md rounded font-sm">Cancel</a>
-                                                                                    <% } else if(orders[i].status=='delivered'){ %>
-                                                                                        <a href="/return?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="btn btn-md rounded font-sm">Return</a>
-                                                                                        <% } else if(orders[i].status=='returned'){ %>
-                        
-                                                                            <% } %> 
-                                                                        
-                                                                    
-                                                                    </td>
-                                                                </tr>
-                        
-                                                                <% } %> 
-                                                                <% } %>
-                                                                <% } else { %>
-                                                                    <tr>
-                                                                      <td colspan="2">No item found in Oders</td>
-                                                                    </tr>
-                                                                    <% } %>
-                                                           
-                                                           
-                                                            
-                                                           
-                                                          
-                                                         
-                                                           
-                                                           
-                                                           
-                                                         
-                                                          
+                                                                <% for (let i=0; i < orders.length;i++) { %>
+                                                                    <% for (let j=0; j < orders[i].product.length; j++)
+                                                                        { %>
+                                                                        <tr>
+                                                                            <!-- <td><%= orders[i]._id %></td> -->
+                                                                            <td><b>
+                                                                                    <%= orders[i].product[j].title %>
+                                                                                </b></td>
+
+                                                                            <td>₹<%= orders[i].totalPrice %>
+                                                                            </td>
+
+                                                                            <% if (orders[i].status=='pending' ) { %>
+
+                                                                                <td><span
+                                                                                        class="badge rounded-pill alert-warning">Pending</span>
+                                                                                </td>
+                                                                                <% } else
+                                                                                    if(orders[i].status=='confirmed' ){
+                                                                                    %>
+                                                                                    <td><span
+                                                                                            class="badge rounded-pill alert-success">confirmed</span>
+                                                                                    </td>
+                                                                                    <% } else
+                                                                                        if(orders[i].status=='canceled'
+                                                                                        ){ %>
+                                                                                        <td><span
+                                                                                                class="badge rounded-pill alert-danger">Cancelled</span>
+                                                                                        </td>
+                                                                                        <% } else
+                                                                                            if(orders[i].status=='shipped'
+                                                                                            ){ %>
+                                                                                            <td><span
+                                                                                                    class="badge rounded-pill alert-success">shipped</span>
+                                                                                            </td>
+                                                                                            <% } else
+                                                                                                if(orders[i].status=='delivered'
+                                                                                                ){ %>
+                                                                                                <td><span
+                                                                                                        class="badge rounded-pill alert-success">delivered</span>
+                                                                                                </td>
+                                                                                                <% } else
+                                                                                                    if(orders[i].status=='returned'
+                                                                                                    ){ %>
+                                                                                                    <td><span
+                                                                                                            class="badge rounded-pill alert-danger">returned</span>
+                                                                                                    </td>
+
+                                                                                                    <% } %>
+
+
+                                                                                                        <td>
+                                                                                                            <%= orders[i].createdOn.toLocaleDateString()
+                                                                                                                %>
+                                                                                                        </td>
+                                                                                                        <td
+                                                                                                            class="text-end">
+                                                                                                            <a href="/orderDetails?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"
+                                                                                                                class="btn btn-md rounded font-sm">Detail</a>
+                                                                                                            <% if
+                                                                                                                (orders[i].status=='pending'
+                                                                                                                ) { %>
+                                                                                                                <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="
+                                                                                                                    btn
+                                                                                                                    btn-md
+                                                                                                                    rounded
+                                                                                                                    font-sm">Cancel</a>
+                                                                                                                <% } else
+                                                                                                                    if(orders[i].status=='confirmed'
+                                                                                                                    ){
+                                                                                                                    %>
+                                                                                                                    <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="
+                                                                                                                        btn
+                                                                                                                        btn-md
+                                                                                                                        rounded
+                                                                                                                        font-sm">Cancel</a>
+
+
+                                                                                                                    <% } else
+                                                                                                                        if(orders[i].status=='canceled'
+                                                                                                                        ){
+                                                                                                                        %>
+                                                                                                                        <% } else
+                                                                                                                            if(orders[i].status=='shipped'
+                                                                                                                            ){
+                                                                                                                            %>
+                                                                                                                            <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="
+                                                                                                                                btn
+                                                                                                                                btn-md
+                                                                                                                                rounded
+                                                                                                                                font-sm">Cancel</a>
+                                                                                                                            <% } else
+                                                                                                                                if(orders[i].status=='delivered'
+                                                                                                                                ){
+                                                                                                                                %>
+                                                                                                                                <a href="javascript:void(0);" class="btn btn-md rounded font-sm" onclick="confirmReturn('<%= orders[i].product[j]._id %>', '<%= orders[i]._id %>');">Return</a>
+
+
+                                                                                                                                <% } else
+                                                                                                                                    if(orders[i].status=='returned'
+                                                                                                                                    ){
+                                                                                                                                    %>
+
+                                                                                                                                    <% }
+                                                                                                                                        %>
+
+
+                                                                                                        </td>
+                                                                        </tr>
+
+                                                                        <% } %>
+                                                                            <% } %>
+                                                                                <% } else { %>
+                                                                                    <tr>
+                                                                                        <td colspan="2">No item found in
+                                                                                            Oders</td>
+                                                                                    </tr>
+                                                                                    <% } %>
+
+
+
+
+
+
+
+
+
+
+
                                                         </tbody>
                                                     </table>
                                                 </div> <!-- table-responsive //end -->
@@ -413,55 +490,70 @@
 
 
 
-                                    <div class="tab-pane fade" id="changeUserPassword" role="tabpanel" aria-labelledby="orders-tab">
+                                    <div class="tab-pane fade" id="changeUserPassword" role="tabpanel"
+                                        aria-labelledby="orders-tab">
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5 class="mb-0">CHANGE PASSWORD</h5>
                                             </div>
                                             <form method="post" action="/changeUserPassword">
-                                                <div class="row justify-content-center width=50% align-items-center min-vh-50">
+                                                <div
+                                                    class="row justify-content-center width=50% align-items-center min-vh-50">
                                                     <div class="form-group col-md-9">
-                                                        <label><h5>Old Password</h5></label>
-                                                        <input required="" class="form-control square" name="oldPassword" type="password">
+                                                        <label>
+                                                            <h5>Old Password</h5>
+                                                        </label>
+                                                        <input required="" class="form-control square"
+                                                            name="oldPassword" type="password">
                                                     </div>
                                                     <div class="form-group col-md-9">
-                                                        <label><h5>New Password</h5></label>
-                                                        <input required="" class="form-control square" name="newPassword" type="password">
+                                                        <label>
+                                                            <h5>New Password</h5>
+                                                        </label>
+                                                        <input required="" class="form-control square"
+                                                            name="newPassword" type="password">
                                                     </div>
                                                     <div class="form-group col-md-9">
-                                                        <label><h5>Confirm New Password</h5></label>
-                                                        <input required="" class="form-control square" name="confirmNewPassword" type="password">
+                                                        <label>
+                                                            <h5>Confirm New Password</h5>
+                                                        </label>
+                                                        <input required="" class="form-control square"
+                                                            name="confirmNewPassword" type="password">
                                                     </div>
                                                     <div class="col-md-9">
-                                                        <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Change Password</button>
+                                                        <button type="submit" class="btn btn-fill-out submit"
+                                                            name="submit" value="Submit">Change Password</button>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="changeUserOrder" role="tabpanel" aria-labelledby="orders-tab">
+                                    <div class="tab-pane fade" id="changeUserOrder" role="tabpanel"
+                                        aria-labelledby="orders-tab">
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5 class="mb-0">REFERRAL</h5>
                                             </div>
-                                    
-                                            <div class="row justify-content-center width=50% align-items-center min-vh-50">
+
+                                            <div
+                                                class="row justify-content-center width=50% align-items-center min-vh-50">
                                                 <div class="form-group col-md-9">
                                                     <label for="referralLink">Referral Link:</label>
                                                     <input type="text" id="referralLink" readonly>
-                                                    <button onclick="generateReferral('<%= user._id %>')">Generate Referral</button>
+                                                    <button onclick="generateReferral('<%= user._id %>')">Generate
+                                                        Referral</button>
 
-                                    
+
                                                     <label for="referralCode">Referral Code:</label>
                                                     <input type="text" id="referralCode" readonly>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                            
-                                            
-                                            
-                                            
+
+
+
+
                                     <div class="tab-pane fade" id="track-orders" role="tabpanel"
                                         aria-labelledby="track-orders-tab">
                                         <div class="card">
@@ -469,35 +561,54 @@
                                                 <h5 class="mb-0">Wallet Transaction</h5>
                                             </div>
                                             <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>id</th>
-                                                    <th>Date</th>
-                                                    <th>Status</th>
-                                                    <th>Total</th>
-                                                    
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <% for (let i=0; i < user.history.length;i++) { %>
+                                                <thead>
                                                     <tr>
-                                                        <td><%=i+1%></td>
-                                                        <td><%= new Date(user.history[i].timestamp).toLocaleDateString() %></td>
-                                                      
-                                                        <td><%= user.history[i].status %></td>
-                                                        <td>₹<%= (user.history[i].amount ).toFixed(2)%> </td>
-                                                        
-                                                    </tr>
+                                                        <th>id</th>
+                                                        <th>Date</th>
+                                                        <th>Status</th>
+                                                        <th>Total</th>
 
-                                                    <% } %> 
-                                                   
-                                                   
-                                               
-                                               
-                                                
-                                            </tbody>
-                                        </table>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <% for (let i=0; i < user.history.length;i++) { %>
+                                                        <tr>
+                                                            <td>
+                                                                <%=i+1%>
+                                                            </td>
+                                                            <td>
+                                                                <%= new
+                                                                    Date(user.history[i].timestamp).toLocaleDateString()
+                                                                    %>
+                                                            </td>
+
+                                                            <td>
+                                                                <%= user.history[i].status %>
+                                                            </td>
+                                                            <td>₹<%= (user.history[i].amount ).toFixed(2)%>
+                                                            </td>
+
+                                                        </tr>
+
+                                                        <% } %>
+
+
+
+
+
+                                                </tbody>
+                                            </table>
+                                            <div class="pagination-container">
+                                                <nav aria-label="Page navigation">
+                                                    <ul class="pagination">
+                                                        <!-- Pagination links will be added dynamically using JavaScript -->
+                                                    </ul>
+                                                </nav>
+                                            </div>
+
+
+
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="address" role="tabpanel"
@@ -522,7 +633,8 @@
                                                                     Name: <%= user.address[i].fullName %><br>
                                                                         Pin: <%= user.address[i].pinCode %>
                                                                             <%= user.address[i].townCity %><br>
-                                                                                Landmark: <%= user.address[i].landmark %>
+                                                                                Landmark: <%= user.address[i].landmark
+                                                                                    %>
                                                                                     <br>
                                                                                     House: <%=
                                                                                         user.address[i].addressLine %>
@@ -539,7 +651,8 @@
                                                                 </p>
                                                                 <a href="/editAddress?id=<%=user.address[i]._id %>"
                                                                     class="btn-small">Edit</a> <span> || </span>
-                                                                    <a href="/deleteAddress?id=<%= encodeURIComponent(user.address[i]._id) %>" class="btn-small">Delete</a>
+                                                                <a href="/deleteAddress?id=<%= encodeURIComponent(user.address[i]._id) %>"
+                                                                    class="btn-small">Delete</a>
 
 
 
@@ -587,7 +700,8 @@
                                             </div>
                                             <div class="card-body">
 
-                                                <form method="post" action="/addUserAddress" onsubmit="return validateForm()">
+                                                <form method="post" action="/addUserAddress"
+                                                    onsubmit="return validateForm()">
                                                     <div class="row">
                                                         <div class="form-group col-md-12">
                                                             <label>
@@ -746,25 +860,25 @@
             var referralCode = "YOUR_REFERRAL_CODE"; // Replace with your actual referral code
             var referralLink = `http://localhost:5000/register?id=${id}&ref=${referralCode}`;
             var copyText = `Refer a friend using this link: ${referralLink}`;
-    
+
             Swal.fire({
                 icon: 'success',
                 title: 'Copied Successfully',
                 showConfirmButton: false,
                 timer: 1500
             });
-    
+
             navigator.clipboard.writeText(copyText)
-                .then(function() {
+                .then(function () {
                     console.log("Text copied to clipboard: " + copyText);
-    
+
                     // If you want to close something with the class 'close-container' here
                     var noThanksButton = document.querySelector('.close-container button');
                     if (noThanksButton) {
                         noThanksButton.click();
                     }
                 })
-                .catch(function(err) {
+                .catch(function (err) {
                     console.error("Failed to copy text: " + err);
                 });
         }
@@ -916,96 +1030,200 @@
     <script>
         function validateForm() {
             var isValid = true;
-        
+
             // Reset error messages
             var errors = document.querySelectorAll('.error');
-            for(var i = 0; i < errors.length; i++) {
+            for (var i = 0; i < errors.length; i++) {
                 errors[i].textContent = '';
             }
-        
+
             // Validate Full Name
             var fullName = document.querySelector('[name="fullName"]').value.trim();
-            if(fullName === "") {
+            if (fullName === "") {
                 document.getElementById('fullNameError').textContent = "Full Name cannot be empty or just spaces!";
                 isValid = false;
             }
-        
+
             // Validate Mobile
             var mobile = document.querySelector('[name="mobile"]').value.trim();
-            if(mobile === "" || isNaN(mobile) || mobile.length !== 10) {
+            if (mobile === "" || isNaN(mobile) || mobile.length !== 10) {
                 document.getElementById('mobileError').textContent = "Please enter a valid 10-digit mobile number!";
                 isValid = false;
             }
-        
+
             // Validate Region
             var region = document.querySelector('[name="region"]').value.trim();
-            if(region === "") {
+            if (region === "") {
                 document.getElementById('regionError').textContent = "Region cannot be empty or just spaces!";
                 isValid = false;
             }
-        
+
             // Validate PinCode
             var pinCode = document.querySelector('[name="pinCode"]').value.trim();
-            if(pinCode === "" || isNaN(pinCode)) {
+            if (pinCode === "" || isNaN(pinCode)) {
                 document.getElementById('pinCodeError').textContent = "Please enter a valid PinCode!";
                 isValid = false;
             }
-        
+
             // Validate AddressLine
             var addressLine = document.querySelector('[name="addressLine"]').value.trim();
-            if(addressLine === "") {
+            if (addressLine === "") {
                 document.getElementById('addressLineError').textContent = "Address cannot be empty or just spaces!";
                 isValid = false;
             }
-        
+
             // Validate AreaStreet
             var areaStreet = document.querySelector('[name="areaStreet"]').value.trim();
-            if(areaStreet === "") {
+            if (areaStreet === "") {
                 document.getElementById('areaStreetError').textContent = "Area/Street cannot be empty or just spaces!";
                 isValid = false;
             }
-        
+
             // Validate Landmark
             var landmark = document.querySelector('[name="landmark"]').value.trim();
-            if(landmark === "") {
+            if (landmark === "") {
                 document.getElementById('landmarkError').textContent = "Landmark cannot be empty or just spaces!";
                 isValid = false;
             }
-        
+
             // Validate Town/City
             var townCity = document.querySelector('[name="townCity"]').value.trim();
-            if(townCity === "") {
+            if (townCity === "") {
                 document.getElementById('townCityError').textContent = "Town/City cannot be empty or just spaces!";
                 isValid = false;
             }
-        
+
             return isValid;
         }
-        </script>
-        <script>
-            function generateReferral(username) {
-                var id = username; // Replace with your actual user ID or any identifier
-                var referralCode = generateReferralCode(8); // Replace with your referral code generation logic
-        
-                var referralLink = `http://localhost:5000/register?id=${id}&ref=${referralCode}`;
-        
-                document.getElementById("referralLink").value = referralLink;
-                document.getElementById("referralCode").value = referralCode;
+    </script>
+    <script>
+        function generateReferral(username) {
+            var id = username; // Replace with your actual user ID or any identifier
+            var referralCode = generateReferralCode(8); // Replace with your referral code generation logic
+
+            var referralLink = `http://localhost:5000/register?id=${id}&ref=${referralCode}`;
+
+            document.getElementById("referralLink").value = referralLink;
+            document.getElementById("referralCode").value = referralCode;
+        }
+
+        function generateReferralCode(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let referralCode = '';
+
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                referralCode += characters.charAt(randomIndex);
             }
-        
-            function generateReferralCode(length) {
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                let referralCode = '';
-        
-                for (let i = 0; i < length; i++) {
-                    const randomIndex = Math.floor(Math.random() * characters.length);
-                    referralCode += characters.charAt(randomIndex);
-                }
-        
-                return referralCode;
+
+            return referralCode;
+        }
+    </script>
+    <script>
+        // Function to initialize pagination
+        function initPagination() {
+            var pageSize = 20; // Set the number of rows per page
+
+            // Hide all rows in the table
+            $('table tbody tr').hide();
+
+            // Show the first 'pageSize' rows
+            $('table tbody tr').slice(0, pageSize).show();
+
+            // Calculate the number of pages
+            var pageCount = Math.ceil($('table tbody tr').length / pageSize);
+
+            // Generate pagination links
+            for (var i = 1; i <= pageCount; i++) {
+                $('.pagination').append('<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>');
             }
+
+            // Add click event to pagination links
+            $('.pagination a').click(function (e) {
+                e.preventDefault();
+
+                // Remove 'active' class from all pagination links
+                $('.pagination li').removeClass('active');
+
+                // Add 'active' class to the clicked link
+                $(this).parent().addClass('active');
+
+                // Hide all rows
+                $('table tbody tr').hide();
+
+                // Show the selected page
+                var page = parseInt($(this).text()); // Parse the page number to an integer
+                var start = (page - 1) * pageSize;
+                var end = start + pageSize;
+
+                // Show the items within the range of start to end, but not exceeding the total number of items
+                $('table tbody tr').slice(start, Math.min(end, $('table tbody tr').length)).show();
+            });
+        }
+
+        // Call the initPagination function when the document is ready
+        $(document).ready(function () {
+            initPagination();
+        });
+    </script>
+
+    <script>
+       
+    function confirmReturn(productId, orderId) {
+        swal({
+            title: "Are you sure?",
+            text: "Once returned, the action cannot be undone!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willReturn) => {
+            if (willReturn) {
+                // Display success message
+                swal({
+                    text: "The item has been returned",
+                    icon: "success",
+                    timer: 3000,
+                    buttons: false,
+                }).then(() => {
+                    // Implement the return functionality and redirect
+                    
+                    returnItem(productId, orderId);
+                    location.reload()
+                });
+            }
+        });
+    }
+    function returnItem(productId, orderId) {
+    // Make an Ajax request to the server to handle the return action
+    fetch(`/return?id=${productId}&orderId=${orderId}`, {
+        method: 'GET', // or 'POST' based on your server-side implementation
+        headers: {
+            'Content-Type': 'application/json',
+            // Add any additional headers if needed
+        },
+        // No need for a body in a GET request
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response from the server as needed
+        console.log(data);
+        // You may want to refresh the page or update the UI accordingly
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error:', error);
+    });
+}
+
+
         </script>
-      
+
+
+
+
+
+
+
 
 
 
