@@ -151,10 +151,18 @@
                                                             %></span>
                                                   
                                                 </div>
-                                                <div class="product-action-1 show">
-                                                    <a aria-label="Add To Cart" class="action-btn hover-up"
-                                                        onclick="addToCart('<%=product[i].id%>')"><i class="fi-rs-shopping-bag-add"></i></a>
-                                                </div>
+                                                <% if(product[i].quantity === 0){ %>
+                                                    <div class="product-action-1 show">
+                                                        <a  style="color: red;"
+                                                            ><i > OUT OF STOCK</i></a>
+                                                    </div>
+                                           <% }else{ %>
+                                            <div class="product-action-1 show">
+                                                <a aria-label="Add To Cart" class="action-btn hover-up"
+                                                    onclick="addToCart('<%=product[i].id%>')"><i class="fi-rs-shopping-bag-add"></i></a>
+                                            </div>
+
+                                            <%}%>
                                             </div>
                                         </div>
                                     </div>
@@ -393,7 +401,7 @@ function addToCart(id){
                     url:`/addToCart?id=${id}`,
                     method:"get",
                     success: (response)=>{
-                        if(response.status){
+                        if(response.status == true){
                             Swal.fire({
   title: 'ADD TO CART',
   text: 'Product Added to cart',
@@ -402,8 +410,15 @@ function addToCart(id){
   showConfirmButton: false, // This removes the button
 });
                            
-                        }else{
-                            location.href='/login'
+                        }else {
+                            Swal.fire({
+  title: 'OUT OF STOCK',
+  text: '..............',
+  icon: 'error',
+  timer: 1000,
+  showConfirmButton: false, // This removes the button
+});
+                            // location.href='/login'
                         }
 
                     }

@@ -31,15 +31,19 @@ const getCart = asyncHandler(async (req, res) => {
 
 const addToCart = asyncHandler(async (req, res) => {
     try {
-        const id = req.query.id
+        const id =String(req.query.id)
+        console.log('yeeoooooo',id);
         const user = req.session.user
         const product = await Product.findById(id)
-
+        console.log('yeeoooooo',product);
         const userData = await User.findById(user)
 
         if (userData) {
-            const cartItem = userData.cart.find(item => String(item.ProductId) === id)
-            if (cartItem) {
+            const cartItem = userData.cart.find(item => String(item.ProductId) === String(id))
+
+            if(cartItem){
+            if (cartItem.quantity < product.quantity ) {
+               
                 const updated = await User.updateOne(
                     { _id: user, 'cart.ProductId': id },
                     {
@@ -49,15 +53,26 @@ const addToCart = asyncHandler(async (req, res) => {
                         },
                     }
                 )
+            
             } else {
-                userData.cart.push({
-                    ProductId: id,
-                    quantity: 1,
-                    total: product.price,
-                    subTotal: product.price,
-                });
-                const a = await userData.save()
+                // userData.cart.push({
+                //     ProductId: id,
+                //     quantity: 1,
+                //     total: product.price,
+                //     subTotal: product.price,
+                // });
+                // const a = await userData.save()
+                res.json({ status: false })
             }
+        }else{
+            userData.cart.push({
+                ProductId: id,
+                quantity: 1,
+                total: product.price,
+                subTotal: product.price,
+            });
+            const a = await userData.save()
+        }
         }
         res.json({ status: true })
 

@@ -197,7 +197,7 @@
             const currentproduct = orders.slice(startindex, endindex)
 
 
-            res.render('orderlist', { orders: currentproduct, totalpages, currentPage, user })
+            res.render('orderlist', { orders:orders, totalpages, currentPage, user })
         } catch (error) {
             console.log('Error from orderCtrl in the function allOrderDetails', error);
             res.status(500).json({ status: false, error: 'Server error' });
@@ -519,10 +519,10 @@
 
     const buyNow = asyncHandler(async (req, res) => {
         try {
-            const product = await Product.findById(req.query.id)
+            const products = await Product.findById(req.query.id)
 
 
-            if (product.quantity >= 1) {
+            if (products.quantity >= 1) {
 
 
                 const id = req.session.user
@@ -533,11 +533,11 @@
 
 
 
-                let sum = product.price
-                res.render('checkout', { user, product, sum, coupon })
+                let sum = products.price
+                res.render('checkout', { user, products, sum, coupon })
 
             } else {
-                res.redirect(`/aProduct?id=${product._id}`)
+                res.redirect(`/aProduct?id=${products._id}`)
             }
 
 
@@ -853,6 +853,44 @@ if( date != "all"){
             res.status(500).send('An error occurred');
         }
     })
+
+    const buyNOw=asyncHandler(async(req,res)=>{
+        try {
+            const product= await Product.findById(req.query.id)
+      
+      
+            if(product.quantity >=1 ){
+              
+      
+                const id = req.session.user
+                const user = await User.findById(id)
+                const coupon = await Coupon.find({
+                    'user.userId': { $ne: user._id }
+                });
+                
+               
+                
+               let sum= product.price 
+                res.render('buyNow', { user, product, sum ,coupon})
+      
+            }else{
+                res.redirect(`/aProduct?id=${product._id}`)
+            }
+           
+      
+      
+      
+        } catch (error) {
+            console.log('Error occurred in orderCTrl buyNOw:', error);
+            
+        }
+      
+      })
+   
+      
+    
+      
+      
 
 
 

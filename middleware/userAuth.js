@@ -16,7 +16,7 @@ const isLogged = (req, res, next) => {
           // console.log('redie');
           res.redirect('/logout');
         }
-      })
+      }) 
       .catch((error) => {
         console.error(error);
         res.status(500).send('Server Error');
