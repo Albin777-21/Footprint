@@ -3,9 +3,12 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow">Home</a>
-                    <span></span> Fashion
-                    <span></span> Abstract Print Patchwork Dress
+                    <a href="/" rel="nofollow">Home</a>
+                    <span><%= product.category %></span>
+                    <span><%= product.title %></span>
+
+
+                    
                 </div>
             </div>
         </div>
@@ -82,7 +85,7 @@
                                         </div>
                                         <div class="clearfix product-price-cover">
                                             <div class="product-price primary-color float-left">
-                                                <ins><span class="text-brand">₹<%= product.price %></span></ins>
+                                                <ins><span class="text-brand">₹<%= Math.round(product.price) %></span></ins>
                                                 <ins><span class="old-price font-md ml-15">₹<%=Math.round(product.price+50) %></span></ins>
                                                 <span class="save-price  font-md color3 ml-15">25% Off</span>
                                             </div>
@@ -155,17 +158,13 @@
                                 <div class="tab-content shop_info_tab entry-main-content">
                                     <div class="tab-pane fade show active" id="Description">
                                         <div class="">
-                                            <p>Uninhibited carnally hired played in whimpered dear gorilla koala depending and much yikes off far quetzal goodness and from for grimaced goodness unaccountably and meadowlark near unblushingly crucial scallop
-                                                tightly neurotic hungrily some and dear furiously this apart.</p>
-                                            <p>Spluttered narrowly yikes left moth in yikes bowed this that grizzly much hello on spoon-fed that alas rethought much decently richly and wow against the frequent fluidly at formidable acceptably flapped
-                                                besides and much circa far over the bucolically hey precarious goldfinch mastodon goodness gnashed a jellyfish and one however because.
-                                            </p>
+                                            <a href="shop-grid-right.html"><%= product.
+                                                description %></a>
                                             <ul class="product-more-infor mt-30">
-                                                <li><span>Type Of Packing</span> Bottle</li>
-                                                <li><span>Color</span> Green, Pink, Powder Blue, Purple</li>
-                                                <li><span>Quantity Per Case</span> 100ml</li>
-                                                <li><span>Ethyl Alcohol</span> 70%</li>
-                                                <li><span>Piece In One</span> Carton</li>
+                                                <li><span>Type Of Packing</span> Biodegradable Packaging</li>
+                                                <li><span>Color</span> <a href="shop-grid-right.html"><%= product.color %></a></li>
+                                                <li><span>Quantity </span><a href="shop-grid-right.html"><%= product.quantity%></a> </li>
+                                              
                                             </ul>
                                             <hr class="wp-block-separator is-style-dots">
                                             <p>Laconic overheard dear woodchuck wow this outrageously taut beaver hey hello far meadowlark imitatively egregiously hugged that yikes minimally unanimous pouted flirtatiously as beaver beheld above forward
