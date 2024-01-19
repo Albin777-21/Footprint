@@ -28,6 +28,7 @@ const invoice = asyncHandler(async (req, res) => {
 
   } catch (error) {
     console.log('Error happens in the invoice controll invoice function', error);
+    res.status(404).render('404', { statusCode: 404, message: "Page not found" });
   }
 })
 

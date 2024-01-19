@@ -89,6 +89,7 @@ const allCategory=asyncHandler(async(req,res)=>{
         res.render('category',({category:allCategory,message:null}))
     } catch (error) {
         console.log('This is all category error',error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 })

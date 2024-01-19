@@ -47,6 +47,7 @@
 
         } catch (error) {
             console.log("error in checkout function", error);
+            res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         }
     });
 
@@ -61,6 +62,7 @@
             res.render('orderPage', { user })
         } catch (error) {
             console.log('Error form order Controll  in the form function OrderPage', error);
+            res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
         }
     })
@@ -159,6 +161,7 @@
             }
         } catch (error) {
             console.log("Error From Form Order Control in the function OrderPlaced", error);
+            res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
         }
     });
@@ -176,6 +179,7 @@
             res.render('orderDtls', { order, user })
         } catch (error) {
             console.log("Error Happens in OrderDetails Function");
+            res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
         }
     })
@@ -200,7 +204,7 @@
             res.render('orderlist', { orders:orders, totalpages, currentPage, user })
         } catch (error) {
             console.log('Error from orderCtrl in the function allOrderDetails', error);
-            res.status(500).json({ status: false, error: 'Server error' });
+            res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
         }
     })
@@ -241,7 +245,7 @@
         } catch (error) {
             console.log('Error occurred in cart ctrl in function cancelOrder', error);
 
-            res.status(500).json({ message: 'Internal Server Error' });
+            res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
         }
     })
@@ -299,7 +303,7 @@
         } catch (error) {
             console.log('Error occurred in returnOrder function:', error);
 
-            res.status(500).json({ message: 'Internal Server Error' });
+            res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         }
     });
 
@@ -320,6 +324,7 @@
             res.render('orderList', { orders: currentproduct, totalpages, currentpage })
         } catch (error) {
             console.log('error in orderList function', error);
+            
 
         }
     });

@@ -31,7 +31,7 @@ const addToList = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log('Error in the addToWishlist function', error);
-        res.status(500).json({ status: false, message: 'Internal server error.' });
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -59,6 +59,7 @@ const deleteWishlistItem=asyncHandler(async(req,res)=>{
         }
     } catch (error) {
         console.log('Error in the Deletewishlist Function',error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 })
@@ -81,6 +82,7 @@ const Wishlist=asyncHandler(async(req,res)=>{
         }
     } catch (error) {
         console.log('Error in the wishlist function',error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 })

@@ -33,6 +33,7 @@ const loadIndex = asyncHandler(async (req, res) => {
         res.render('index', { user, product, category: category ,banner})
     } catch (error) {
         console.log("error happens in userController loadIndex function ", error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
        
 
 
@@ -48,6 +49,7 @@ const loginUser = async (req, res) => {
         res.render('login', { message: '' })
     } catch (error) {
         console.log("login user error");
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 }
@@ -56,6 +58,7 @@ const emailForgot = asyncHandler(async (req, res) => {
 
         res.render('forgotOTP')
     } catch (error) {
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -74,6 +77,7 @@ const registerUser = async (req, res) => {
         res.render('registration')
     } catch (error) {
         console.log(error.message);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 
@@ -134,6 +138,7 @@ const createUser = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log("Create user error", error.message);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 });
@@ -176,6 +181,7 @@ const resendOTP = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log("error in resend otp function", error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -202,6 +208,7 @@ const verifyUser = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log("Error in userController verifyUser function:", error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -271,7 +278,7 @@ const emailVerified = async (req, res) => {
         }
     } catch (error) {
         console.log('User email verification error', error);
-        return res.status(500).send('Internal Server Error');
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 };
 
@@ -368,6 +375,7 @@ const userProfile = asyncHandler(async (req, res) => {
         res.render('userProfile', { user, orders })
     } catch (error) {
         console.log('Error in the userProfile', error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -382,6 +390,7 @@ const editProfile = asyncHandler(async (req, res) => {
         res.render('editProfile', { user })
     } catch (error) {
         console.log('Error in the editProfile', error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 })
 
@@ -407,6 +416,7 @@ const updateProfile = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log('Error in update user function', error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -439,6 +449,7 @@ const addProfilePic = asyncHandler(async (req, res) => {
     } catch (error) {
         console.log("Error in addProfilePic function", error);
         res.status(500).send({ message: 'Internal server error' })
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -458,6 +469,7 @@ const processNewAddress = asyncHandler(async (req, res) => {
 
     } catch (error) {
         console.log("Error happens in the userCntrl processNewAddress function", error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -478,6 +490,7 @@ const addUserAddress = asyncHandler(async (req, res) => {
 
     } catch (error) {
         console.log("Error  in addUserAddress function", error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -497,6 +510,7 @@ const checkoutAddress = asyncHandler(async (req, res) => {
         res.redirect('/checkout')
     } catch (error) {
         console.log("Error happens in the usercontroll Checkout function", error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -512,6 +526,7 @@ const editAddress = asyncHandler(async (req, res) => {
         res.render('editAddress', { address })
     } catch (error) {
         console.log('Error in the editAddress', error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 })
 
@@ -543,6 +558,7 @@ const updateAddress = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log('Error in the update address function', error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -564,6 +580,7 @@ const deleteAddress = asyncHandler(async (req, res) => {
         console.log('This is the deleted address', deleteAddress);
     } catch (error) {
         console.log('Error in the deleteAddress Function', error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
 
     }
@@ -579,6 +596,7 @@ const forgotPsdPage = asyncHandler(async (req, res) => {
             "Error happents in userControler forgotPsdPage  function :",
             error
         );
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -633,6 +651,7 @@ const forgotEmailValid = asyncHandler(async (req, res) => {
             "Error happens in userControler forgotEmailValid function:",
             error
         );
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -656,6 +675,7 @@ const forgotPsdOTP = asyncHandler(async (req, res) => {
             "Error hapents in userControler forgotPsdOTP  function :",
             error
         );
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -686,6 +706,7 @@ const updatePassword = asyncHandler(async (req, res) => {
             "Error hapents in userControler updatePassword  function :",
             error
         );
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -730,7 +751,7 @@ const changePassword = asyncHandler(async (req, res) => {
         return res.status(200).json({ message: 'Password changed successfully' });
     } catch (error) {
         console.error('Error in userController changePassword function:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -742,6 +763,7 @@ const aboutpage= asyncHandler(async(req,res)=>{
         
     } catch (error) {
         console.log('Error Happence in th about Ctrl in;; the funtion aboutpage',error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 })
 
@@ -753,6 +775,7 @@ const contactpage= asyncHandler(async(req,res)=>{
         
     } catch (error) {
         console.log('Error Happence in the contactCtrl in;; the funtion contact page',error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 })
 

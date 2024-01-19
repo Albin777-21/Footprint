@@ -30,7 +30,7 @@ const allProducts = asyncHandler(async (req, res) => {
     } catch (error) {
       console.error("Error in all products view", error);
       // Handle the error appropriately, for example, send an error response to the client
-      res.status(500).send("Internal Server Error");
+      res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
   });
   
@@ -130,7 +130,7 @@ const editProduct = asyncHandler(async (req, res) => {
 
     } catch (error) {
         console.log('Error occurred in editProduct function', error);
-        res.status(500).send('Server Error'); // Send a suitable error response
+      res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -165,7 +165,7 @@ const productEdited = asyncHandler(async (req, res) => {
         res.redirect('/admin/product');
     } catch (error) {
         console.log('Error occurred in productEdited function', error);
-        res.status(500).send('Server Error');
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -188,7 +188,7 @@ const aProductPage = asyncHandler(async (req, res) => {
 
     } catch (error) {
         console.log('Error occurred in product controller aProductPage function', error);
-        res.status(500).send('Server Error'); 
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -234,7 +234,7 @@ const shopProduct = asyncHandler(async (req, res) => {
     } catch (error) {
         console.log('Error occurred in shopProduct function', error);
         // Handle the error appropriately, for example, by sending an error response.
-        res.status(500).send('Internal Server Error');
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 

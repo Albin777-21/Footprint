@@ -40,6 +40,7 @@ const filterSearch=asynchandler(async(req,res)=>{
         }
     } catch (error) {
         console.log('Error happens in the filter controll filrerSearch function',error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 });
@@ -62,6 +63,7 @@ const sizeFilter=asynchandler(async(req,res)=>{
         res.render('filter',{product:currentproduct,totalpages,currentpage,cat})
     } catch (error) {
         console.log('Error happens in the filter controll SizeFileter function',error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 })
@@ -83,6 +85,7 @@ const colorFilter=asynchandler(async(req,res)=>{
 
     } catch (error) {
         console.log("Error happens in the filter controll colorFilter",error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 });
@@ -105,6 +108,7 @@ const priceFilter=asynchandler(async(req,res)=>{
         res.render('filter',{product:currentproduct,totalpages,currentpage,cat})
     } catch (error) {
         console.log("Error happens in the Filter controll prizeFilter function",error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 });
@@ -126,6 +130,7 @@ const brandFilter=asynchandler(async(req,res)=>{
     } catch (error) {
         console.log("Error happens in the filter controll brandFilter function",error
         );
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
 
     }
@@ -148,6 +153,7 @@ const CategoryFilter=asynchandler(async(req,res)=>{
         res.render('filter',{product:currentproduct,totalpages,currentpage,cat})
     } catch (error) {
         console.log("Error happens in the filter  control categorFilter function",error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 });
@@ -167,6 +173,7 @@ const clearFilter=asynchandler(async(req,res)=>{
         res.render('filter',{product:currentproduct,totalpages,currentpage,cat})
     } catch (error) {
         console.log("Error happens in the filter controll clearfilter function",error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -194,6 +201,7 @@ const sortByPrice=asynchandler(async(req,res)=>{
         res.render('filter',{product:currentproduct,totalpages,currentpage,cat})
     } catch (error) {
         console.log('Error happens in the filter controll sortPrize function',error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 });
 
@@ -213,6 +221,7 @@ const productSearch=asynchandler(async(req,res)=>{
         res.render('filter',{product:currentproduct,totalpages,currentpage})
     } catch (error) {
         console.log("Error happens in the filtercontrol Product Search function",error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
         
     }
 })

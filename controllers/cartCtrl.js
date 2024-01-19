@@ -79,6 +79,7 @@ const addToCart = asyncHandler(async (req, res) => {
 
     } catch (error) {
         console.log('Error occured in cart controll AddtoCart function', error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -110,7 +111,7 @@ const deleteCartItem = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log("Error in Cart controll", error);
-        return res.json({ status: false, message: 'Internal Server Error' })
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
@@ -188,7 +189,7 @@ const modifyCartQuantity=asyncHandler(async(req,res)=>{
 
     } catch (error) {
         console.error('ERROR hapence in cart ctrl in the funtion update crt',error);
-        return res.status(500).json({ status: false, error: "Server error" });
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
     }
 
     
@@ -207,6 +208,7 @@ const deleteCart = asyncHandler(async (req, res) => {
         res.json({ status: true })
     } catch (error) {
         console.log('Error Happens in the deleteCart function', error);
+        res.status(404).render('404', { statusCode: 404, message: "Page not found" });
 
     }
 })
