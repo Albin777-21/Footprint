@@ -39,6 +39,7 @@ app.use(session({
 app.use(nocache())
 app.use('/',userRouter);
 app.use('/admin',adminRouter);
+app.use('/*',(req,res)=>res.render('404',{statuscode:404,message:"page not found"}))
 
 
 

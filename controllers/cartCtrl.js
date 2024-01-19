@@ -23,6 +23,7 @@ const getCart = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.log('Error in Get Cart function', error);
+        res.status(500).render('404',{message:'Internal Server Error',statuscode:500})
 
     }
 })

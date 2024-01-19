@@ -33,31 +33,48 @@ const addNewBanner=asyncHandler(async(req,res)=>{
 })
 
 //CREATE BANNER
-
-const createBanner=asyncHandler(async(req,res)=>{
+const createBanner = asyncHandler(async (req, res) => {
     try {
-        const {title,description,link}=req.body
-        console.log('This is req.body',req.body);
-        const allreadyExist=await Banner.findOne({title})
-        if(!allreadyExist){
-            const banner=new Banner({
-                image:req.file.filename,
+        const { title, description, link } = req.body;
+
+        // Validate request body fields
+        if (!title || !description || !link) {
+            return res.status(400).send("Title, description, and link are required.");
+        }
+
+        console.log('This is req.body', req.body);
+
+        // Check if a file is present in the request
+        if (!req.file) {
+            return res.status(400).send("File is required.");
+        }
+
+        // Check if a banner with the same title already exists
+        const alreadyExist = await Banner.findOne({ title });
+
+        if (!alreadyExist) {
+            const banner = new Banner({
+                image: req.file.filename,
                 title,
                 description,
-                date:Date.now(),
+                date: Date.now(),
                 link
-            })
-            const a=await banner.save()
-            console.log('This is banner',a);
-            res.redirect('/admin/banner')
+            });
 
+            // Save the banner to the database
+            const savedBanner = await banner.save();
+
+            console.log('This is banner', savedBanner);
+            res.redirect('/admin/banner');
+        } else {
+            return res.status(400).send("Banner with the same title already exists.");
         }
     } catch (error) {
-        console.log('Error happens in the createbannerFunction',error);
-        res.status(500).send("Internal server error")
-        
+        console.log('Error happens in the createBanner function', error);
+        res.status(500).send("Internal server error");
     }
-})
+});
+
 
 //  EDIT BANNER
 
