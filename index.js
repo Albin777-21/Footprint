@@ -39,7 +39,17 @@ app.use(session({
 app.use(nocache())
 app.use('/',userRouter);
 app.use('/admin',adminRouter);
-app.use('/*',(req,res)=>res.render('404',{statuscode:404,message:"page not found"}))
+// Define your other routes before this catch-all route
+
+// Your other routes go here...
+
+// Catch-all route for handling undefined routes
+app.use('/*', (req, res, next) => {
+    res.status(404).render('404', { statusCode: 404, message: "Page not found" });
+  });
+  
+
+  
 
 
 

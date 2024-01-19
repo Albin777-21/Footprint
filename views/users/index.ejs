@@ -143,14 +143,13 @@
                                                         <%= product[i].title %>
                                                     </a></h2>
                                                
-                                                    <span style="color: rgb(106, 184, 158);">saved:₹<%=product[i].offerPrice
+                                                    <span style="color: rgb(106, 184, 158);">saved:₹<%=product[i].offerPrice.toFixed(0)
                                                         %> </span>
-                                                <div class="product-price">
-                                                    <span>₹<%=product[i].price %> </span>
-                                                    <span class="old-price">₹<%=product[i].price+product[i].offerPrice
-                                                            %></span>
-                                                  
-                                                </div>
+                                              <div class="product-price">
+                                                <span>₹<%= product[i].price.toFixed(0) %></span>
+                                                <span class="old-price">₹<%= (product[i].price + product[i].offerPrice).toFixed(0) %></span>
+                                            </div>
+                                            
                                                 <% if(product[i].quantity === 0){ %>
                                                     <div class="product-action-1 show">
                                                         <a  style="color: red;"
@@ -295,9 +294,10 @@
                                             </span>
                                         </div>
                                         <div class="product-price">
-                                            <span>₹<%=product[i].price %></span>
-                                            <span class="old-price">₹<%= Math.round(product[i].price+50) %></span>
+                                            <span>₹<%= Math.round(product[i].price) %></span>
+                                            <span class="old-price">₹<%= Math.round(product[i].price + 50) %></span>
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <!--End product-cart-wrap-2-->
