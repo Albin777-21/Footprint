@@ -1,9 +1,32 @@
 <%- include('header') %>
+
 <script>
     function formatDate(dateString) {
         const date = new Date(dateString);
         const options = { year: 'numeric', month: 'short', day: '2-digit' };
         return date.toLocaleDateString(undefined, options);
+    }
+
+    function confirmReturn(productId, orderId) {
+        swal({
+            title: "Are you sure?",
+            text: "Once returned, you will not be able to recover this product!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willReturn) => {
+            if (willReturn) {
+                swal("Poof! Your product has been returned!", {
+                    icon: "success",
+                });
+                location.href = `/return?id=${productId}&orderId=${orderId}`;
+            } else {
+                swal("Return canceled!", {
+                    icon: "error",
+                });
+            }
+        });
     }
 </script>
 <br>
