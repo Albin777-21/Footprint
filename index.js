@@ -44,7 +44,7 @@ app.use('/admin',adminRouter);
 // Your other routes go here...
 
 // Catch-all route for handling undefined routes
-app.use('/*', (req, res, next) => {
+app.use('*', (req, res, next) => {
     console.log("Catch-all route triggered for", req.url);
     res.status(404).render('404', { statusCode: 404, message: "Page not found" });
   });

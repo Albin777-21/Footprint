@@ -341,152 +341,53 @@
                                                     <table class="table table-hover">
                                                         <thead>
                                                             <tr>
-                                                                <!-- <th>#ID</th> -->
                                                                 <th scope="col">Name</th>
-
                                                                 <th scope="col">Total</th>
                                                                 <th scope="col">Status</th>
                                                                 <th scope="col">Date</th>
-                                                                <th scope="col" class="text-end"> Action </th>
+                                                                <th scope="col" class="text-end">Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <% if (orders.length> 0) { %>
-                                                                <% for (let i=0; i < orders.length;i++) { %>
-                                                                    <% for (let j=0; j < orders[i].product.length; j++)
-                                                                        { %>
+                                                            <% if (orders.length > 0) { %>
+                                                                <% for (let i = 0; i < orders.length; i++) { %>
+                                                                    <% for (let j = 0; j < orders[i].product.length; j++) { %>
                                                                         <tr>
-                                                                            <!-- <td><%= orders[i]._id %></td> -->
-                                                                            <td><b>
-                                                                                    <%= orders[i].product[j].title %>
-                                                                                </b></td>
-
-                                                                            <td>₹<%= orders[i].totalPrice %>
-                                                                            </td>
-
-                                                                            <% if (orders[i].status=='pending' ) { %>
-
-                                                                                <td><span
-                                                                                        class="badge rounded-pill alert-warning">Pending</span>
-                                                                                </td>
-                                                                                <% } else
-                                                                                    if(orders[i].status=='confirmed' ){
-                                                                                    %>
-                                                                                    <td><span
-                                                                                            class="badge rounded-pill alert-success">confirmed</span>
-                                                                                    </td>
-                                                                                    <% } else
-                                                                                        if(orders[i].status=='canceled'
-                                                                                        ){ %>
-                                                                                        <td><span
-                                                                                                class="badge rounded-pill alert-danger">Cancelled</span>
-                                                                                        </td>
-                                                                                        <% } else
-                                                                                            if(orders[i].status=='shipped'
-                                                                                            ){ %>
-                                                                                            <td><span
-                                                                                                    class="badge rounded-pill alert-success">shipped</span>
-                                                                                            </td>
-                                                                                            <% } else
-                                                                                                if(orders[i].status=='delivered'
-                                                                                                ){ %>
-                                                                                                <td><span
-                                                                                                        class="badge rounded-pill alert-success">delivered</span>
-                                                                                                </td>
-                                                                                                <% } else
-                                                                                                    if(orders[i].status=='returned'
-                                                                                                    ){ %>
-                                                                                                    <td><span
-                                                                                                            class="badge rounded-pill alert-danger">returned</span>
-                                                                                                    </td>
-
-                                                                                                    <% } %>
-
-
-                                                                                                        <td>
-                                                                                                            <%= orders[i].createdOn.toLocaleDateString()
-                                                                                                                %>
-                                                                                                        </td>
-                                                                                                        <td
-                                                                                                            class="text-end">
-                                                                                                            <a href="/orderDetails?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"
-                                                                                                                class="btn btn-md rounded font-sm">Detail</a>
-                                                                                                            <% if
-                                                                                                                (orders[i].status=='pending'
-                                                                                                                ) { %>
-                                                                                                                <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="
-                                                                                                                    btn
-                                                                                                                    btn-md
-                                                                                                                    rounded
-                                                                                                                    font-sm">Cancel</a>
-                                                                                                                <% } else
-                                                                                                                    if(orders[i].status=='confirmed'
-                                                                                                                    ){
-                                                                                                                    %>
-                                                                                                                    <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="
-                                                                                                                        btn
-                                                                                                                        btn-md
-                                                                                                                        rounded
-                                                                                                                        font-sm">Cancel</a>
-
-
-                                                                                                                    <% } else
-                                                                                                                        if(orders[i].status=='canceled'
-                                                                                                                        ){
-                                                                                                                        %>
-                                                                                                                        <% } else
-                                                                                                                            if(orders[i].status=='shipped'
-                                                                                                                            ){
-                                                                                                                            %>
-                                                                                                                            <a href="/cancelOrder?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"" class="
-                                                                                                                                btn
-                                                                                                                                btn-md
-                                                                                                                                rounded
-                                                                                                                                font-sm">Cancel</a>
-                                                                                                                            <% } else
-                                                                                                                                if(orders[i].status=='delivered'
-                                                                                                                                ){
-                                                                                                                                %>
-                                                                                                                                <a href="javascript:void(0);" class="btn btn-md rounded font-sm" onclick="confirmReturn('<%= orders[i].product[j]._id %>', '<%= orders[i]._id %>');">Return</a>
-
-
-                                                                                                                                <% } else
-                                                                                                                                    if(orders[i].status=='returned'
-                                                                                                                                    ){
-                                                                                                                                    %>
-
-                                                                                                                                    <% }
-                                                                                                                                        %>
-
-
-                                                                                                        </td>
-                                                                        </tr>
-
-                                                                        <% } %>
+                                                                            <td><b><%= orders[i].product[j].title %></b></td>
+                                                                            <td>₹<%= orders[i].totalPrice %></td>
+                                                                            <% if (orders[i].status == 'pending') { %>
+                                                                                <td><span class="badge rounded-pill alert-warning">Pending</span></td>
+                                                                            <% } else if (orders[i].status == 'confirmed') { %>
+                                                                                <td><span class="badge rounded-pill alert-success">confirmed</span></td>
+                                                                            <% } else if (orders[i].status == 'canceled') { %>
+                                                                                <td><span class="badge rounded-pill alert-danger">Cancelled</span></td>
+                                                                            <% } else if (orders[i].status == 'shipped') { %>
+                                                                                <td><span class="badge rounded-pill alert-success">shipped</span></td>
+                                                                            <% } else if (orders[i].status == 'delivered') { %>
+                                                                                <td><span class="badge rounded-pill alert-success">delivered</span></td>
+                                                                            <% } else if (orders[i].status == 'returned') { %>
+                                                                                <td><span class="badge rounded-pill alert-danger">returned</span></td>
                                                                             <% } %>
-                                                                                <% } else { %>
-                                                                                    <tr>
-                                                                                        <td colspan="2">No item found in
-                                                                                            Oders</td>
-                                                                                    </tr>
-                                                                                    <% } %>
-
-
-
-
-
-
-
-
-
-
-
+                                                                            <td><%= orders[i].createdOn.toLocaleDateString() %></td>
+                                                                            <td class="text-end">
+                                                                                <a href="/orderDetails?id=<%= orders[i].product[j]._id %>&orderId=<%= orders[i]._id %>"
+                                                                                    class="btn btn-md rounded font-sm">Details</a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    <% } %>
+                                                                <% } %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="2">No item found in Orders</td>
+                                                                </tr>
+                                                            <% } %>
                                                         </tbody>
                                                     </table>
                                                 </div> <!-- table-responsive //end -->
                                             </div>
                                         </div>
                                     </div>
+                                    
 
 
 
